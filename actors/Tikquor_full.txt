@@ -1,0 +1,41 @@
+name=Tikquor
+race=Dragonborn
+class=Fighter
+avatar=/res/HERO.png
+level=4
+speed=6
+basehp=15
+str=18
+con=15
+dex=12
+int=8
+wis=14
+cha=14
+athletics=trained
+endurance=trained
+intimidate=trained
+
+[item]
+name=Greataxe +1
+attack=+1
+damage=+1
+dice=1d12
+l
+[item]
+name=Cloak of Intimidation
+intimidate=+2
+
+[item]
+name=chainmail
+armor=+6
+
+[effect]
+name=dragonborn racial
+history=+2
+intimidate=+2
+
+[feat]
+name=weapon focus
+[condition]
+weapon=axe
+atk=+1
