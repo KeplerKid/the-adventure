@@ -22,6 +22,8 @@ public class Actor {
 	private BufferedImage avatar;
 	private int[] location;
 
+	private Weapon equipedWeapon;
+	
 	private int currentHP;
 	private HashMap<String, String> stats;
 
@@ -54,15 +56,18 @@ public class Actor {
 		currentHP += 6 * (getStatInteger("level") - 1);
 		currentHP += getStatInteger("con");
 
-		System.out.println(currentHP);
-		/*
-		 * // Ability scores STR = getStatInteger("str"); CON =
-		 * getStatInteger("con"); DEX = getStatInteger("dex"); INT =
-		 * getStatInteger("int"); WIS = getStatInteger("wis"); CHA =
-		 * getStatInteger("cha");
-		 * 
-		 * // Skill scores acrobatics = getStatInteger("acrobatics");
-		 */
+	}
+
+	public void equipWeapon(Weapon weapon) {
+		equipedWeapon = weapon;
+	}
+	
+	public Weapon getEquipedWeapon() {
+		return equipedWeapon;
+	}
+
+	public void setEquipedWeapon(Weapon equipedWeapon) {
+		this.equipedWeapon = equipedWeapon;
 	}
 
 	public int getStatInteger(String stat) {
@@ -172,6 +177,10 @@ public class Actor {
 
 	public int getCurrentHP() {
 		return currentHP;
+	}
+
+	public Weapon getWeapon() {
+		return null;
 	}
 
 }

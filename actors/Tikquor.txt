@@ -11,6 +11,7 @@ dex=12
 int=8
 wis=14
 cha=14
+ac=19
 athletics=5
 endurance=5
 intimidate=5

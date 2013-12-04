@@ -8,6 +8,7 @@ public class Dice {
 		
 		for (int i = 0; i < numDice; i++) {
 			 rolls[i] = (int)(Math.random() * numSides) + 1;
+			 System.out.println("Roll result " + numDice + "d" + numSides + ": " + rolls[i]);
 		}
 		return rolls;
 	}

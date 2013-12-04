@@ -24,7 +24,7 @@ public class World extends JPanel implements MouseListener {
 
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private ArrayList<Doodad> doodads = new ArrayList<Doodad>();
-	private Actor selcetedActor;
+	private Actor selectedActor;
 
 	private class MoveActionYay extends AbstractAction {
 
@@ -42,7 +42,7 @@ public class World extends JPanel implements MouseListener {
 			System.out.println("yay");
 			System.out.println(xDiff);
 			System.out.println(yDiff);
-			updateActorPosition(selcetedActor, new int[] { xDiff, yDiff });
+			updateActorPosition(selectedActor, new int[] { xDiff, yDiff });
 			repaint();
 		}
 
@@ -83,7 +83,7 @@ public class World extends JPanel implements MouseListener {
 	public void addActor(Actor c) {
 		actors.add(c);
 		if (actors.size() == 1) {
-			selcetedActor = actors.get(0);
+			selectedActor = actors.get(0);
 		}
 	}
 
@@ -144,7 +144,7 @@ public class World extends JPanel implements MouseListener {
 		}
 
 		if (destinationAvailable) {
-			selcetedActor.updatePosition(positionUpdate);
+			selectedActor.updatePosition(positionUpdate);
 		} else {
 			System.out.println("Destination is occupied, cannot move there");
 		}
@@ -182,8 +182,16 @@ public class World extends JPanel implements MouseListener {
 	}
 
 	private void selectActor(Actor a) {
-		selcetedActor = a;
+		selectedActor = a;
 		a.select();
+	}
+
+	public Actor getSelectedActor() {
+		return selectedActor;
+	}
+
+	public void setSelectedActor(Actor selcetedActor) {
+		this.selectedActor = selcetedActor;
 	}
 
 	private int[] convertMoiseCoordToTile(MouseEvent e) {

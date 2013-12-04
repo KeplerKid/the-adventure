@@ -30,34 +30,28 @@ public class Ability {
 		this.damageDieSides = damageDieSides;
 	}
 
-	public Ability(String source, 
-			String defense, 
+	
+
+	public Ability(
+			String source,
+			String defense,
 			int range,
 			ArrayList<Effect> effects,
 			ArrayList<Requirement> requirements,
-			boolean usesProficiencyBonus) {
-
+			boolean usesProficiencyBonus,
+			boolean usesWeapon,
+			int damageDieCount,
+			int damageDieSides) {
+		
 		this.source = source;
 		this.defense = defense;
 		this.range = range;
 		this.effects = effects;
 		this.requirements = requirements;
 		this.usesProficiencyBonus = usesProficiencyBonus;
-		
-	}
-
-	public Ability(String source, 
-			String defense, 
-			int range,
-			boolean usesProficiencyBonus) {
-
-		this.source = source;
-		this.defense = defense;
-		this.range = range;
-		this.requirements = null;
-		this.effects = null;
-		this.usesProficiencyBonus = usesProficiencyBonus;
-		
+		this.usesWeapon = usesWeapon;
+		this.damageDieCount = damageDieCount;
+		this.damageDieSides = damageDieSides;
 	}
 
 	public boolean isUsesWeapon() {

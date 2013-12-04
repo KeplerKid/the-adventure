@@ -20,7 +20,7 @@ public class Attack {
 		int d20result = Dice.quickRoll(1, 20);
 		boolean hit = false;
 		boolean crit = false;
-		
+
 		if (d20result == 20) {
 			hit = true;
 			crit = true; // not necessarily always true?
@@ -53,18 +53,25 @@ public class Attack {
 		} else {
 			numSides = ability.getDamageDieSides();
 		}
-		
+
+		System.out.println("numDie" + numDie);
+		System.out.println("numSides" + numSides);
 		if (!crit) {
 			damage = Dice.quickRoll(numDie, numSides);
+			System.out.println("not crit");
 		} else {
 			// max damage
 			damage = numDie * numSides;
+			System.out.println("CRITICAL HIT!");
 		}
+		
+		System.out.println("weapon damage roll: " + damage);
 		
 		damage += weapon.getEnhancementLevel();
 		
-		damage += attacker.getStatInteger(ability.getSource());
+		damage += (attacker.getStatInteger(ability.getSource()) - 10) / 2 ;
 		
+		System.out.println(damage + " damage dealt");
 		return damage;
 	}
 
@@ -78,7 +85,7 @@ public class Attack {
 	private int addAttackBonuses(int d20result) {
 		int attackerTotal = 0;
 		
-		int abilityModBonus = attacker.getStatInteger(ability.getSource());
+		int abilityModBonus = (attacker.getStatInteger(ability.getSource()) - 10) / 2;
 		int halfLevelBonus = attacker.getStatInteger("level") / 2;
 		int enhancementBonus = weapon.getEnhancementLevel();		
 		int weaponProficiencyBonus = 0;
@@ -87,6 +94,8 @@ public class Attack {
 		}
 		
 		attackerTotal = d20result + abilityModBonus + halfLevelBonus + weaponProficiencyBonus + enhancementBonus;
+		
+		System.out.println("attackerTotal: " + attackerTotal);
 		
 		return attackerTotal;
 	}
