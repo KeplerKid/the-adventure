@@ -1,7 +1,7 @@
 actorname=Tikquor
 race=Dragonborn
 class=Fighter
-avatar=res/hero.png
+avatar=res/avatars/hero.png
 level=4
 speed=6
 basehp=15

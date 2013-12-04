@@ -1,7 +1,7 @@
 actorname=Gobby
 race=Goblin
 class=Brute
-avatar=res/bad_guy.png
+avatar=res/avatars/bad_guy.png
 level=3
 speed=5
 basehp=28
