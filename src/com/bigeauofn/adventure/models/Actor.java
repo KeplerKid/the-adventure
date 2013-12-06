@@ -1,6 +1,9 @@
 package com.bigeauofn.adventure.models;
 
 import java.awt.image.BufferedImage;
+
+import com.bigeauofn.adventure.dicebag.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +29,7 @@ public class Actor {
 	
 	private int currentHP;
 	private HashMap<String, String> stats;
+	private HashMap<Integer, Dice> diceSet;	
 
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
 	// bluff, diplomancy, dungeoneering, endurance, heal, history,
@@ -38,7 +42,7 @@ public class Actor {
 		this.name = name;
 		this.avatar = loadImage(avatarPath);
 		this.location = location;
-
+		diceSet = DiceFactory.getDiceSet();
 	}
 
 	public Actor(String filePath, ActorHandler handler) {
@@ -55,9 +59,14 @@ public class Actor {
 		currentHP = getStatInteger("basehp");
 		currentHP += 6 * (getStatInteger("level") - 1);
 		currentHP += getStatInteger("con");
+		diceSet = DiceFactory.getDiceSet();
 
 	}
-
+	
+	public RollResult rollDice(Integer i) {
+		return this.diceSet.get(i).rollDice();
+	}
+	
 	public void equipWeapon(Weapon weapon) {
 		equipedWeapon = weapon;
 	}
@@ -181,6 +190,15 @@ public class Actor {
 
 	public Weapon getWeapon() {
 		return null;
+	}
+
+	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
+		return attackRoll.getAttackTotal() >= this.getStatInteger(defense); 
+	}
+	public void takeDamage(DamageRoll damageDealt) {
+		this.currentHP -= damageDealt.getDamage();
+		// updateUI
+		System.out.println(this.name + ": " + currentHP);
 	}
 
 }

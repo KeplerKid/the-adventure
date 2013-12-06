@@ -3,6 +3,7 @@ package com.bigeauofn.adventure;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -92,14 +93,21 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		switch (actionCmd) {
 
 		case ATTACK:
-			System.out.println("attack is about to happen");
 			
 			Actor attacker = world.getSelectedActor();
-			Actor target = badGuy;
+			
 			Ability ability = new Ability("str", "ac", 1, null, null, true, true, 1, -1);
 			
-//			Weapon weapon = attacker.getEquipedWeapon();
 			Weapon weapon = new Weapon("Greataxe +1", 2, 1, 1, 12, 2, 1);
+			
+			int[] targets = Attack.getPossibleTargets(attacker, ability, weapon, world);
+
+			// TODO handle Area of Effect attacks
+			Actor target = badGuy;
+			
+			
+//			Weapon weapon = attacker.getEquipedWeapon();
+			
 			Attack attack = new Attack(attacker, target,
 					ability, weapon);
 			attack.resolve();
@@ -109,5 +117,12 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 		}
 	}
+
+	private Actor displayTargetSelector(ArrayList<Actor> targetChoices) {
+		Actor target = null;
+		
+		return target;
+	}
+	
 
 }
