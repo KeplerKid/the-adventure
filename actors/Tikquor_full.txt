@@ -20,7 +20,7 @@ name=Greataxe +1
 attack=+1
 damage=+1
 dice=1d12
-l
+
 [item]
 name=Cloak of Intimidation
 intimidate=+2

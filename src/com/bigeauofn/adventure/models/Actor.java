@@ -27,7 +27,7 @@ public class Actor {
 
 	private Weapon equipedWeapon;
 	
-	private int currentHP;
+	private HitPoints currentHP;
 	private HashMap<String, String> stats;
 	private HashMap<Integer, Dice> diceSet;	
 
@@ -47,7 +47,7 @@ public class Actor {
 
 	public Actor(String filePath, ActorHandler handler) {
 		mHandler = handler;
-
+int yy = Integer.parseInt("+2");
 		actorFilePath = filePath;
 
 		stats = StatFileParser.parseFile(actorFilePath);
@@ -56,9 +56,9 @@ public class Actor {
 		avatar = loadImage(stats.get("avatar"));
 		location = new int[] { 0, 0 };
 
-		currentHP = getStatInteger("basehp");
-		currentHP += 6 * (getStatInteger("level") - 1);
-		currentHP += getStatInteger("con");
+		currentHP = new HitPoints(getStatInteger("basehp"));
+		currentHP.addtHitPoints(new HitPoints(6 * (getStatInteger("level") - 1)));
+		currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
 		diceSet = DiceFactory.getDiceSet();
 
 	}
@@ -180,11 +180,9 @@ public class Actor {
 		this.stats = stats;
 	}
 
-	public void setCurrentHP(int currentHP) {
-		this.currentHP = currentHP;
-	}
 
-	public int getCurrentHP() {
+
+	public HitPoints getCurrentHP() {
 		return currentHP;
 	}
 
@@ -196,7 +194,7 @@ public class Actor {
 		return attackRoll.getAttackTotal() >= this.getStatInteger(defense); 
 	}
 	public void takeDamage(DamageRoll damageDealt) {
-		this.currentHP -= damageDealt.getDamage();
+		this.currentHP.subtractHitPoints(damageDealt.getDamage());
 		// updateUI
 		System.out.println(this.name + ": " + currentHP);
 	}

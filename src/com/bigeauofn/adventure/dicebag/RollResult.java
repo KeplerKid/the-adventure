@@ -51,8 +51,8 @@ public class RollResult implements Comparable<RollResult>,
 	}
 
 	@Override
-	public int getDamage() {
-		return this.result;
+	public HitPoints getDamage() {
+		return new HitPoints(this.result);
 	}
 
 	@Override
