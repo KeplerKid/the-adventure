@@ -28,7 +28,7 @@ public class Actor {
 	private Weapon equipedWeapon;
 	
 	private HitPoints currentHP;
-	private HashMap<String, String> stats;
+	private HashMap<String, Object> stats;
 	private HashMap<Integer, Dice> diceSet;	
 
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
@@ -47,13 +47,12 @@ public class Actor {
 
 	public Actor(String filePath, ActorHandler handler) {
 		mHandler = handler;
-int yy = Integer.parseInt("+2");
 		actorFilePath = filePath;
 
 		stats = StatFileParser.parseFile(actorFilePath);
 
-		name = stats.get("actorname");
-		avatar = loadImage(stats.get("avatar"));
+		name = stats.get("actorname").toString();
+		avatar = loadImage(stats.get("avatar").toString());
 		location = new int[] { 0, 0 };
 
 		currentHP = new HitPoints(getStatInteger("basehp"));
@@ -80,7 +79,7 @@ int yy = Integer.parseInt("+2");
 	}
 
 	public int getStatInteger(String stat) {
-		return Integer.parseInt(stats.get(stat));
+		return Integer.parseInt(stats.get(stat).toString());
 	}
 
 	public int getAttackModifiers(String attackAttribute) {
@@ -172,11 +171,11 @@ int yy = Integer.parseInt("+2");
 		mHandler.onActorClicked(this);
 	}
 
-	public HashMap<String, String> getStats() {
+	public HashMap<String, Object> getStats() {
 		return stats;
 	}
 
-	public void setStats(HashMap<String, String> stats) {
+	public void setStats(HashMap<String, Object> stats) {
 		this.stats = stats;
 	}
 

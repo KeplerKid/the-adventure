@@ -32,8 +32,13 @@ public class Attack {
 		hit = defender.isHitByAttack(d20result, ability.getDefense());
 
 		if (hit) {
+
+			System.out.println("A Hit was Scored\n");
 			RollResult damageDealt = calculateDamage(d20result);
 			defender.takeDamage(damageDealt);
+		}else{
+
+			System.out.println("The Roll Missed\n");
 		}
 		
 	}

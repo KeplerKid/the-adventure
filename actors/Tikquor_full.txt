@@ -1,9 +1,17 @@
+[Base Data]
 name=Tikquor
 race=Dragonborn
 class=Fighter
 avatar=/res/HERO.png
 level=4
+initiative=3
+ac=18
+fort=18
+ref=13
+will=14
+
 speed=6
+
 basehp=15
 str=18
 con=15
@@ -11,21 +19,25 @@ dex=12
 int=8
 wis=14
 cha=14
+
 athletics=trained
 endurance=trained
 intimidate=trained
 
 [item]
+type=weapon
 name=Greataxe +1
 attack=+1
 damage=+1
 dice=1d12
 
 [item]
+type=armor
 name=Cloak of Intimidation
 intimidate=+2
 
 [item]
+type=armor
 name=chainmail
 armor=+6
 

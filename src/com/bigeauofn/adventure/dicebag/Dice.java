@@ -26,7 +26,7 @@ public class Dice {
 	
 	@Override
 	public String toString(){
-		return "A D" + this.numberOfSides  + " Dice";
+		return "A D" + this.numberOfSides  + " Dice\n";
 	}
 	
 	private void logRoll(RollResult rr){
