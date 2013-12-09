@@ -43,7 +43,7 @@ public class Attribute {
 	
 	@Override
 	public String toString(){
-		return this.name + " Value = " + this.bonus + " Current Bonus = " + this.bonus + "\n";
+		return this.name + " Value = " + this.value + " Current Bonus = " + this.bonus + "\n";
 	}
 
 }

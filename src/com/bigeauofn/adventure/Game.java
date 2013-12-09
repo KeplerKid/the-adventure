@@ -37,8 +37,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 	public Game() {
 
 		// initialize the players
-		player = new Actor("actors/Tikquor.txt", this);
-		badGuy = new Actor("actors/Gobby.txt", this);
+		player = new Actor("actors/Tikquor_full.txt", this);
+		badGuy = new Actor("actors/Tikquor_full.txt", this);
 
 		// create the world
 		world = new World();

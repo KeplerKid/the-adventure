@@ -4,14 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StatFileParser {
 
-	private static final String WEAPON = "[weapon]";
+	private HashMap<String, String> baseData;
+	private HashMap<String, Item> items;
+
+	public StatFileParser(){
+		
+	}
 	
-	public static BufferedReader openFileForReading(String fileNameAndPath) {
+	public HashMap<String, String> getBaseData(){
+		return this.baseData;
+	}
+	
+	private BufferedReader openFileForReading(String fileNameAndPath) {
 		// create the file reader
 		FileReader fr = null;
 		try {
@@ -22,14 +30,16 @@ public class StatFileParser {
 		return new BufferedReader(fr);
 	}
 	
-	public static boolean isNewThing(String line){
+	public boolean isNewThing(String line){
 		return  line.startsWith("[");
 	}
-	public void selectParser(String line){
-		switch (line){
+	public void selectParser(HashMap<String, String> items){
+		switch (items.get("Thing")){
 			case "[Base Data]":
+				parseBaseData(items);
 				break;
 			case"[item]":
+				parseItems(items);
 				break;
 			case "[effect]":
 				break;
@@ -41,42 +51,63 @@ public class StatFileParser {
 				break;
 		}
 	}
+	private void parseBaseData(HashMap<String, String> baseData){
+		this.baseData = baseData;
+	}
+	private void parseItems(HashMap<String, String> newItem){
+		if(this.items == null){
+			this.items = new HashMap<String, Item>();
+		}
+		Item toPut = new Item(newItem.get("name"));
+		this.items.put(toPut.getName(), toPut);
+		for(String s :newItem.keySet()){
+			if(!s.equals("name") && !s.equals("type") && !s.equals("dice") && !s.equals("Thing")){
+				System.out.println(s + " = " + Integer.parseInt(newItem.get(s)));
+				toPut.addAttribute(s, Integer.parseInt(newItem.get(s)), "Item");
+			}else if(s.equals("dice")){
+				String dice = newItem.get(s);
+				int splitter = dice.indexOf("d");
+				String value = dice.substring(splitter+1, dice.length());
+				toPut.addDice(Integer.parseInt(value));
+			}
+		}
+		System.out.println(toPut.toString());
+	}
 	
-	public static HashMap<String, Object> parseFile(String path) {
-		HashMap<String, Object> stats = new HashMap<String, Object>();
+	
+	public HashMap<String, String> parseFile(String path) {
 		
 		BufferedReader br = openFileForReading(path);
-		ArrayList<String> things = new ArrayList<String>();
+		
 		try {
-			
 			String line;
-			HashMap<String,String> items;
+			HashMap<String,String> items = new HashMap<String,String>();
 			while ((line = br.readLine()) != null) {
+
 				if(isNewThing(line)){
+					if(items != null && items.size() > 1){
+					selectParser(items);
+					}
 					items = new HashMap<String,String>();
 					items.put("Thing", line);
 				}else{
-					if(!line.startsWith(";")){
+					if(!line.startsWith(";") && line.contains("=")){
 						int splitter = line.indexOf("=");
 						String key = line.substring(0, splitter);
 						String value = line.substring(splitter+1, line.length());
-					//	items.put(key, value);
+						items.put(key, value);
 					}
 				}
-				if (line.equals(WEAPON)) {
-					Weapon weapon = parseWeapson(br);
-				}
-				parseValue(line, stats);
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return stats;
+		return this.baseData;
 	}
 
-	private static void parseValue(String line, HashMap<String, Object> stats) {
+	private void parseValue(String line, HashMap<String, Object> stats) {
 		int splitter = line.indexOf("=");
 		String key = line.substring(0, splitter);
 		String value = line.substring(splitter+1, line.length());
@@ -102,7 +133,7 @@ public class StatFileParser {
 	}
 	
 	// TODO
-	private static Weapon parseWeapson(BufferedReader br) {
+	private Weapon parseWeapson(BufferedReader br) {
 		Weapon weapon = null;
 		String line;
 		try {

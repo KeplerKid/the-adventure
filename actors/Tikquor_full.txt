@@ -2,14 +2,13 @@
 name=Tikquor
 race=Dragonborn
 class=Fighter
-avatar=/res/HERO.png
+avatar=res/avatars/hero.png
 level=4
 initiative=3
 ac=18
 fort=18
 ref=13
 will=14
-
 speed=6
 
 basehp=15
@@ -48,6 +47,8 @@ intimidate=+2
 
 [feat]
 name=weapon focus
+
 [condition]
+name=condition
 weapon=axe
 atk=+1
