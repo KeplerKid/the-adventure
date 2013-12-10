@@ -45,6 +45,17 @@ enhancementLevel=0
 proficiencyBonus=2
 group=axe
 
+[ability]
+type=magic
+name=Mega Supper Damage +12
+source=faraway
+range=10
+effects=kill,murder,maim
+requirements=strength,iron,will
+usesproficiencybonus=true
+usesweapon=false
+dice=2d10
+
 [item]
 type=armor
 name=Cloak of Intimidation

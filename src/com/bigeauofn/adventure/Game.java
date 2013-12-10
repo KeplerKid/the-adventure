@@ -103,13 +103,10 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			
 			Actor attacker = world.getSelectedActor();
 			
-			Ability ability = new Ability("str", "ac", 1, null, null, true, true, 1, -1);
 			
-			Weapon weapon = attacker.getEquipedWeapon();
 			
-			System.out.println(weapon.getName());
 			
-			int[] targets = Attack.getPossibleTargets(attacker, ability, weapon, world);
+			int[] targets = Attack.getPossibleTargets(attacker,  world);
 
 			// TODO handle Area of Effect attacks
 			Actor target = badGuy;
@@ -117,8 +114,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			
 //			Weapon weapon = attacker.getEquipedWeapon();
 			
-			Attack attack = new Attack(attacker, target,
-					ability, weapon);
+			Attack attack = new Attack(attacker, target);
 			attack.resolve();
 			break;
 

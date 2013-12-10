@@ -12,14 +12,10 @@ public class Attack {
 
 	private Actor attacker;
 	private Actor defender;
-	private Ability ability;
-	private Weapon weapon;
 
-	public Attack(Actor attacker, Actor defender, Ability ability, Weapon weapon) {
+	public Attack(Actor attacker, Actor defender) {
 		this.attacker = attacker;
 		this.defender = defender;
-		this.ability = ability;
-		this.weapon = weapon;
 	}
 
 	public void resolve() {
@@ -29,14 +25,14 @@ public class Attack {
 
 		d20result.addModifier(calculateAttackBonuses());
 
-		hit = defender.isHitByAttack(d20result, ability.getDefense());
+		hit = defender.isHitByAttack(d20result, "ac");
 
 		if (hit) {
 
 			System.out.println("A Hit was Scored\n");
 
-			RollResult damageDealt = calculateDamage(d20result);
-			defender.takeDamage(damageDealt);
+			//RollResult damageDealt = calculateDamage(d20result);
+			defender.takeDamage(attacker.InflictDamage(d20result));
 
 		} else {
 
@@ -45,35 +41,6 @@ public class Attack {
 
 	}
 
-	private RollResult calculateDamage(RollResult d20result) {
-
-		// TODO currently only handles attacks with weapons, not abilities
-		if (ability.isUsesWeapon()) {
-			// TODO make a critical weapon roll
-		} else {
-
-		}
-
-		RollResult damageRolls = null;
-		
-		if (!d20result.isCritical()) {
-
-			damageRolls = attacker.getEquipedWeapon().rollWeaponDice();
-
-		} else {
-			// max damage
-			damageRolls = attacker.getEquipedWeapon().getCriticalDamage();
-			System.out.println("CRITICAL HIT!");
-		}
-
-		// add damage modifiers
-		int damage = weapon.getEnhancementLevel();
-		damage += (attacker.getStatInteger(ability.getSource()) - 10) / 2;
-		damageRolls.addModifier(damage);
-
-		System.out.println(damageRolls + " damage dealt");
-		return damageRolls;
-	}
 
 	/**
 	 * sum up the attack bonuses including weapon proficiency, 1/2 of actor's
@@ -87,16 +54,16 @@ public class Attack {
 		// Ranger's Careful Attack page 105 PHB
 		int bonusesTotal = 0;
 
-		int abilityModBonus = (attacker.getStatInteger(ability.getSource()) - 10) / 2;
+		//int abilityModBonus = (attacker.getStatInteger(ability.getSource()) - 10) / 2;
 		int halfLevelBonus = attacker.getStatInteger("level") / 2;
-		int enhancementBonus = weapon.getEnhancementLevel();
+	//	int enhancementBonus = weapon.getEnhancementLevel();
 		int weaponProficiencyBonus = 0;
-		if (ability.isUsesProficiencyBonus()) {
-			weaponProficiencyBonus += weapon.getProficiencyBonus();
-		}
+		//if (ability.isUsesProficiencyBonus()) {
+		//	weaponProficiencyBonus += weapon.getProficiencyBonus();
+		//}
 
-		bonusesTotal = abilityModBonus + halfLevelBonus
-				+ weaponProficiencyBonus + enhancementBonus;
+	//	bonusesTotal = abilityModBonus + halfLevelBonus
+	//			+ weaponProficiencyBonus + enhancementBonus;
 
 		System.out.println("attackerTotal: " + bonusesTotal);
 
@@ -117,14 +84,13 @@ public class Attack {
 	 *            the weapon used to make the attack
 	 * @return a list of eligible targets for the attack
 	 */
-	public static int[] getPossibleTargets(Actor attacker, Ability ability,
-			Weapon weapon, World world) {
+	public static int[] getPossibleTargets(Actor attacker, World world) {
 
 		int[] actorLoc = attacker.getLocation();
 		int range = 0;
-		if (ability.isUsesWeapon()) {
-			range = weapon.getReach();
-		}
+		//if (ability.isUsesWeapon()) {
+			//range = weapon.getReach();
+		//}
 
 		int numSquares = (int) Math.pow(range, 3);
 		int[] targetSquares = new int[numSquares];

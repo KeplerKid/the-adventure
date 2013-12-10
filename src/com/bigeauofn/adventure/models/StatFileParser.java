@@ -12,6 +12,7 @@ public class StatFileParser {
 	private HashMap<String, String> baseData;
 	private HashMap<String, Item> items;
 	private ArrayList<Weapon> weapons;
+	private ArrayList<Ability> abilities;
 	
 	public StatFileParser() {
 
@@ -46,6 +47,9 @@ public class StatFileParser {
 			break;
 		case "[weapon]":
 			parseWeapon(valueSet);
+			break;
+		case "[ability]":
+			parseAbility(valueSet);
 			break;
 		case "[effect]":
 			break;
@@ -140,6 +144,11 @@ public class StatFileParser {
 		this.getWeapons().add(toPut);
 		
 	}
+	private void parseAbility(HashMap<String, String> ability) {
+		Ability toPut = new Ability(ability);
+		this.getAbilities().add(toPut);
+		
+	}
 
 	public HashMap<String, Item> getItems() {
 		return items;
@@ -154,6 +163,13 @@ public class StatFileParser {
 			this.weapons = new ArrayList<Weapon>();
 		}
 		return weapons;
+	}
+	
+	public ArrayList<Ability> getAbilities(){
+		if(this.abilities == null){
+			this.abilities = new ArrayList<Ability>();
+		}
+		return this.abilities;
 	}
 
 
