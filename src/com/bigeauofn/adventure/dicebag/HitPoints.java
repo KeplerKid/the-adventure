@@ -15,7 +15,7 @@ public class HitPoints {
 	
 	@Override
 	public String toString(){
-		return this.numberOfHitPoints + " Hit Points";
+		return this.numberOfHitPoints + " Hit Points\n";
 	}
 
 }
