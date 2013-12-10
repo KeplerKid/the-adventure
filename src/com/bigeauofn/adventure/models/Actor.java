@@ -207,5 +207,42 @@ public class Actor {
 		// updateUI
 		System.out.println(this.name + ": " + currentHP);
 	}
+	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("------------------------------------------------------\n");
+		sb.append("Actor named - ");
+		sb.append(this.name);
+		sb.append("\n");
+		//sb.append("Avatar file - ");
+		//sb.append(avatar);
+		//sb.append("\n");
+		sb.append("Weapons Counts - ");
+		sb.append(this.weapons.size());
+		for(Weapon w : this.weapons){
+			sb.append("\t" + w.toString());
+		}
+		sb.append("\n");
+		sb.append("Current Hit Points - ");
+		sb.append(this.currentHP);
+		sb.append("\n");
+		for(String s : this.stats.keySet()){
+			sb.append("\tStat - " + s + ", Value - " + this.stats.get(s) +"\n");
+		}
+		sb.append("\n");
+		for(Integer i : this.diceSet.keySet()){
+			sb.append("\t"+this.diceSet.get(i).toString());
+		}
+		sb.append("\n");
+		sb.append("Weapon Count - ");
+		sb.append(this.weapons.size());
+		sb.append("\n");
+		for(Weapon w : this.weapons){
+			sb.append("\t"+w.toString());
+		}
+		sb.append("------------------------------------------------------\n");
+		return sb.toString();
+	}
 
 }

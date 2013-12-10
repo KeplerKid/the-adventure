@@ -38,8 +38,12 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 		// initialize the players
 		player = new Actor("actors/Tikquor_full.txt", this);
+		System.out.println(player.toString());
+		
 		badGuy = new Actor("actors/Gobby.txt", this);
+		System.out.println(badGuy.toString());
 
+		
 		// create the world
 		world = new World();
 		world.addActor(player);
