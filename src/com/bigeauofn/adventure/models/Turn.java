@@ -1,5 +1,6 @@
 package com.bigeauofn.adventure.models;
 
+// TODO no clear direction here, yet!
 public class Turn {
 
 	private boolean usedStandardAction;

@@ -38,7 +38,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 		// initialize the players
 		player = new Actor("actors/Tikquor_full.txt", this);
-		badGuy = new Actor("actors/Tikquor_full.txt", this);
+		badGuy = new Actor("actors/Gobby.txt", this);
 
 		// create the world
 		world = new World();
@@ -98,7 +98,9 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			
 			Ability ability = new Ability("str", "ac", 1, null, null, true, true, 1, -1);
 			
-			Weapon weapon = new Weapon("Greataxe +1", 2, 1, 1, 12, 2, 1);
+			Weapon weapon = attacker.getEquipedWeapon();
+			
+			System.out.println(weapon.getName());
 			
 			int[] targets = Attack.getPossibleTargets(attacker, ability, weapon, world);
 

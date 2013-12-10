@@ -4,36 +4,61 @@ race=Dragonborn
 class=Fighter
 avatar=res/avatars/hero.png
 level=4
-initiative=3
+speed=6
 ac=18
 fort=18
 ref=13
 will=14
-speed=6
 
 basehp=15
+hpperlevel=6
 str=18
 con=15
 dex=12
 int=8
 wis=14
 cha=14
+initiative=3
 
 athletics=trained
 endurance=trained
 intimidate=trained
 
-[item]
+[weapon]
 type=weapon
 name=Greataxe +1
-attack=+1
-damage=+1
 dice=1d12
+hands=2
+reach=1
+enhancementLevel=1
+proficiencyBonus=2
+group=axe
+;property=high crit
+
+[weapon]
+type=weapon
+name=Battleaxe
+dice=1d10
+hands=1
+reach=1
+enhancementLevel=0
+proficiencyBonus=2
+group=axe
 
 [item]
 type=armor
 name=Cloak of Intimidation
 intimidate=+2
+
+[weapon]
+type=weapon
+name=Gobby's Maul of MOTHERFUCK'N DOOM, BITCHES!
+dice=8d12
+hands=2
+reach=1
+enhancementLevel=0
+proficiencyBonus=2
+group=hammer
 
 [item]
 type=armor

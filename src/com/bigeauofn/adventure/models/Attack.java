@@ -9,7 +9,7 @@ public class Attack {
 	public static int BLAST; // blast X would be a XxX area
 	public static int WALL; // a contiguous section of squares
 	public static int RANGED; // target is with X squares
-	
+
 	private Actor attacker;
 	private Actor defender;
 	private Ability ability;
@@ -23,55 +23,46 @@ public class Attack {
 	}
 
 	public void resolve() {
-		
+
 		RollResult d20result = this.attacker.rollDice(20);
 		boolean hit = false;
-		
+
 		d20result.addModifier(calculateAttackBonuses());
-		
+
 		hit = defender.isHitByAttack(d20result, ability.getDefense());
 
 		if (hit) {
 
 			System.out.println("A Hit was Scored\n");
+
 			RollResult damageDealt = calculateDamage(d20result);
 			defender.takeDamage(damageDealt);
-		}else{
+
+		} else {
 
 			System.out.println("The Roll Missed\n");
 		}
-		
+
 	}
 
 	private RollResult calculateDamage(RollResult d20result) {
-		
 
-		int numDie = ability.getDamageDieCount();
-		int numSides;
-
+		// TODO currently only handles attacks with weapons, not abilities
 		if (ability.isUsesWeapon()) {
-			numDie *= weapon.getNumDice();
-			numSides = weapon.getNumSides();
+			// TODO make a critical weapon roll
 		} else {
-			numSides = ability.getDamageDieSides();
+
 		}
 
-		System.out.println("numDie" + numDie);
-		System.out.println("numSides" + numSides);
-		
 		RollResult damageRolls = null;
+		
 		if (!d20result.isCritical()) {
-			
-			for (int i = 0; i < numDie; i++) {
-				if (damageRolls == null) {
-					damageRolls = attacker.rollDice(numSides);
-				} else {
-					damageRolls.addResult(attacker.rollDice(numSides));
-				}
-			}
+
+			damageRolls = attacker.getEquipedWeapon().rollWeaponDice();
+
 		} else {
 			// max damage
-			damageRolls = new RollResult(numSides * numDie, true);
+			damageRolls = attacker.getEquipedWeapon().getCriticalDamage();
 			System.out.println("CRITICAL HIT!");
 		}
 
@@ -79,7 +70,7 @@ public class Attack {
 		int damage = weapon.getEnhancementLevel();
 		damage += (attacker.getStatInteger(ability.getSource()) - 10) / 2;
 		damageRolls.addModifier(damage);
-		
+
 		System.out.println(damageRolls + " damage dealt");
 		return damageRolls;
 	}
@@ -126,19 +117,19 @@ public class Attack {
 	 *            the weapon used to make the attack
 	 * @return a list of eligible targets for the attack
 	 */
-	public static int[] getPossibleTargets(Actor attacker,
-			Ability ability, Weapon weapon, World world) {
+	public static int[] getPossibleTargets(Actor attacker, Ability ability,
+			Weapon weapon, World world) {
 
 		int[] actorLoc = attacker.getLocation();
 		int range = 0;
 		if (ability.isUsesWeapon()) {
 			range = weapon.getReach();
 		}
-		
+
 		int numSquares = (int) Math.pow(range, 3);
 		int[] targetSquares = new int[numSquares];
 		for (int i = 0; i < numSquares; i++) {
-			//targetSquares
+			// targetSquares
 		}
 		return null;
 	}

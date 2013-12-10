@@ -29,6 +29,12 @@ public class Dice {
 		return "A D" + this.numberOfSides  + " Dice\n";
 	}
 	
+	public RollResult rollDice(boolean isCrit) {
+		RollResult toReturn = new RollResult(this.numberOfSides);
+		this.logRoll(toReturn);
+		return toReturn;
+	}
+	
 	private void logRoll(RollResult rr){
 		System.out.println(this.toString() + " Just had a " + rr.toString());
 	}

@@ -1,14 +1,19 @@
 package com.bigeauofn.adventure.models;
 
 import java.awt.image.BufferedImage;
-
-import com.bigeauofn.adventure.dicebag.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+
+import com.bigeauofn.adventure.dicebag.AttackRoll;
+import com.bigeauofn.adventure.dicebag.DamageRoll;
+import com.bigeauofn.adventure.dicebag.Dice;
+import com.bigeauofn.adventure.dicebag.DiceFactory;
+import com.bigeauofn.adventure.dicebag.HitPoints;
+import com.bigeauofn.adventure.dicebag.RollResult;
 
 public class Actor {
 
@@ -26,11 +31,12 @@ public class Actor {
 	private int[] location;
 
 	private Weapon equipedWeapon;
-	
+
 	private HitPoints currentHP;
 	private HashMap<String, String> stats;
-	private HashMap<Integer, Dice> diceSet;	
-
+	private HashMap<Integer, Dice> diceSet;
+	private ArrayList<Weapon> weapons;
+	
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
 	// bluff, diplomancy, dungeoneering, endurance, heal, history,
 	// insight, intimidate, nature, perception, religion, stealth,
@@ -56,22 +62,27 @@ public class Actor {
 		location = new int[] { 0, 0 };
 
 		currentHP = new HitPoints(getStatInteger("basehp"));
-		currentHP.addtHitPoints(new HitPoints(6 * (getStatInteger("level") - 1)));
+		currentHP
+				.addtHitPoints(new HitPoints(6 * (getStatInteger("level") - 1)));
 		currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
 		diceSet = DiceFactory.getDiceSet();
+		
+		weapons = fp.getWeapons();
 
 	}
-	
+
 	public RollResult rollDice(Integer i) {
 		return this.diceSet.get(i).rollDice();
 	}
-	
+
 	public void equipWeapon(Weapon weapon) {
 		equipedWeapon = weapon;
 	}
-	
+
 	public Weapon getEquipedWeapon() {
-		return equipedWeapon;
+//		return equipedWeapon;
+		int rand = (int) (Math.random() * 100) % weapons.size();
+		return weapons.get(rand);
 	}
 
 	public void setEquipedWeapon(Weapon equipedWeapon) {
@@ -179,8 +190,6 @@ public class Actor {
 		this.stats = stats;
 	}
 
-
-
 	public HitPoints getCurrentHP() {
 		return currentHP;
 	}
@@ -190,8 +199,9 @@ public class Actor {
 	}
 
 	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
-		return attackRoll.getAttackTotal() >= this.getStatInteger(defense); 
+		return attackRoll.getAttackTotal() >= this.getStatInteger(defense);
 	}
+
 	public void takeDamage(DamageRoll damageDealt) {
 		this.currentHP.subtractHitPoints(damageDealt.getDamage());
 		// updateUI
