@@ -52,8 +52,9 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		// setup the frame
 		JFrame gameFrame = new JFrame("The Adventure");
 		gameFrame.setLayout(new BorderLayout());
-		gameFrame.setSize(boardSideLength + xScreenFudge, boardSideLength
-				+ yScreenFudge + infoAreaHeight);
+		gameFrame.setSize(boardSideLength  , boardSideLength
+				+  infoAreaHeight);
+		
 
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -70,6 +71,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		attackBtn.addActionListener(this);
 
 		menu = new MenuPanel();
+
+		//menu.setSize(640, 600);
 		menu.add(actorName);
 		menu.add(actorHP);
 		menu.add(attackBtn);
