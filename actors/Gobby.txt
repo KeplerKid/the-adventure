@@ -31,7 +31,7 @@ name=Gobby's Maul of Death
 dice=2d6
 hands=2
 reach=1
-enhancementLevel=0
+enhancementLevel=3
 proficiencyBonus=2
 group=hammer
 
@@ -41,89 +41,10 @@ name=Gobby's Maul of Death
 dice=2d6
 hands=2
 reach=1
-enhancementLevel=0
+enhancementLevel=2
 proficiencyBonus=2
 group=hammer
 
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
-
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=0
-proficiencyBonus=2
-group=hammer
 
 [weapon]
 type=weapon
@@ -131,6 +52,6 @@ name=Gobby's Maul of MOTHERFUCK'N DOOM, BITCHES!
 dice=3d12
 hands=2
 reach=1
-enhancementLevel=0
+enhancementLevel=20
 proficiencyBonus=2
 group=hammer

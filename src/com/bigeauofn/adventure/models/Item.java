@@ -56,7 +56,7 @@ public class Item {
 		sb.append(this.attributes.size());
 		sb.append(" Attributes\n");
 		for (Attribute a : this.attributes.values()) {
-			sb.append(a.toString());
+			sb.append("\t" + a.toString());
 		}
 		sb.append(" and Has ");
 		sb.append(this.dice.size());
