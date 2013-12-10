@@ -7,7 +7,6 @@ public class Dice {
 	
 	public  Dice(int numberOfSides){
 		this.numberOfSides = numberOfSides;
-		System.out.println(this.toString() + " was just creater");
 	}
 	
 	public RollResult rollDice(){

@@ -21,7 +21,6 @@ public class Item {
 	}
 
 	public void addAttribute(String name, int value, String type) {
-		System.out.println(value);
 		Attribute toAdd = new Attribute(name, value, type);
 		this.attributes.put(name, toAdd);
 	}

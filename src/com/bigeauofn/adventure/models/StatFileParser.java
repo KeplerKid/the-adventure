@@ -76,8 +76,7 @@ public class StatFileParser {
 					&& !s.equals("dice")
 					&& !s.equals("Thing")) {
 				
-				System.out
-						.println(s + " = " + Integer.parseInt(newItem.get(s)));
+				
 				
 				toPut.addAttribute(s, Integer.parseInt(newItem.get(s)), "Item");
 				
@@ -90,7 +89,6 @@ public class StatFileParser {
 				
 			}
 		}
-		System.out.println(toPut.toString());
 	}
 
 	public HashMap<String, String> parseFile(String path) {
@@ -134,30 +132,6 @@ public class StatFileParser {
 		return this.baseData;
 	}
 
-	private void parseValue(String line, HashMap<String, Object> stats) {
-		int splitter = line.indexOf("=");
-		String key = line.substring(0, splitter);
-		String value = line.substring(splitter + 1, line.length());
-
-		boolean isANumber = false;
-		int existingValue = 0;
-
-		if (stats.get(key) != null) {
-			try {
-				existingValue = Integer.parseInt(stats.get(key).toString());
-				isANumber = true;
-			} catch (NumberFormatException e) {
-			}
-		}
-
-		if (isANumber) {
-			int newValue = Integer.parseInt(value) + existingValue;
-			stats.put(key, newValue + "");
-		} else {
-			stats.put(key, value);
-		}
-		System.out.println(key + " " + value);
-	}
 
 
 	private void parseWeapon(HashMap<String, String> weapon) {
@@ -165,7 +139,6 @@ public class StatFileParser {
 		Weapon toPut = new Weapon(weapon);
 		this.getWeapons().add(toPut);
 		
-		System.out.println(toPut.toString());
 	}
 
 	public HashMap<String, Item> getItems() {
