@@ -71,6 +71,18 @@ name=dragonborn racial
 history=+2
 intimidate=+2
 
+
+[ability]
+type=magic
+name=Big Jump +12
+source=faraway
+range=10
+effects=kill,murder,maim
+requirements=strength,iron,will
+usesproficiencybonus=true
+usesweapon=false
+dice=2d10
+
 [feat]
 name=weapon focus
 
@@ -78,3 +90,5 @@ name=weapon focus
 name=condition
 weapon=axe
 atk=+1
+
+[end]

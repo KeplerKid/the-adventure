@@ -48,7 +48,6 @@ proficiencyBonus=2
 group=hammer
 
 
-
 [ability]
 type=magic
 name=Mega Supper Damage +182
@@ -60,7 +59,6 @@ usesproficiencybonus=true
 usesweapon=false
 dice=2d10
 
-
 [ability]
 type=magic
 name=Cloak of Invisibility +200
@@ -71,3 +69,5 @@ requirements=cloak,leather,shoes
 usesproficiencybonus=true
 usesweapon=false
 dice=3d4
+
+[end]
