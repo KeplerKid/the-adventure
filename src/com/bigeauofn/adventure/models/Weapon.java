@@ -105,28 +105,21 @@ public class Weapon {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Weapon Named ");
 		sb.append(this.name);
-		sb.append("\n");
-		sb.append("Hands to Wield - ");
+		sb.append(" Hands to Wield - ");
 		sb.append(this.handsToWield);
-		sb.append("\n");
-		sb.append("Reach - ");
-		sb.append(this.reach);
-		sb.append("\n");
-		sb.append("Dice Count - ");
-		sb.append(this.dice.size());
-		sb.append("\n");
+		sb.append(" Reach - ");
+		sb.append(this.reach); 
+		sb.append(" Dice Count - ");
+		sb.append(this.dice.size()); 
 		for(Dice d : this.dice){
-			sb.append("\t" + d.toString());
+			sb.append(" " + d.toString());
 		}
-		sb.append("Proficiency Bonus - ");
-		sb.append(this.proficiencyBonus); 
-		sb.append("\n");
-		sb.append("Enhancement Level - ");
-		sb.append(this.enhancementLevel);
-		sb.append("\n");
-		sb.append("Group - ");
-		sb.append(this.group);
-		sb.append("\n");
+		sb.append(" Proficiency Bonus - ");
+		sb.append(this.proficiencyBonus);  
+		sb.append(" Enhancement Level - ");
+		sb.append(this.enhancementLevel); 
+		sb.append(" Group - ");
+		sb.append(this.group); 
 		
 		return sb.toString();
 	}

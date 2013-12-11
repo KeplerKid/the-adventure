@@ -35,15 +35,6 @@ enhancementLevel=3
 proficiencyBonus=2
 group=hammer
 
-[weapon]
-type=weapon
-name=Gobby's Maul of Death
-dice=2d6
-hands=2
-reach=1
-enhancementLevel=2
-proficiencyBonus=2
-group=hammer
 
 
 [weapon]
@@ -55,3 +46,28 @@ reach=1
 enhancementLevel=20
 proficiencyBonus=2
 group=hammer
+
+
+
+[ability]
+type=magic
+name=Mega Supper Damage +182
+source=faraway
+range=10
+effects=kill,murder,maim
+requirements=strength,iron,will
+usesproficiencybonus=true
+usesweapon=false
+dice=2d10
+
+
+[ability]
+type=magic
+name=Cloak of Invisibility +200
+source=close
+range=10
+effects=addstealth,addinitiative
+requirements=cloak,leather,shoes
+usesproficiencybonus=true
+usesweapon=false
+dice=3d4
