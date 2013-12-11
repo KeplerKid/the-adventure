@@ -82,6 +82,7 @@ public class Actor {
 	public Weapon getEquipedWeapon() {
 //		return equipedWeapon;
 		int rand = (int) (Math.random() * 100) % weapons.size();
+		System.out.println(weapons.get(rand).getName());
 		return weapons.get(rand);
 	}
 

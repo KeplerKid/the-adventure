@@ -81,7 +81,6 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 	@Override
 	public void onActorClicked(Actor actor) {
-		System.out.println("hi");
 		actorName.setText(actor.getName());
 		actorHP.setText(actor.getCurrentHP() + "");
 	}
@@ -89,7 +88,6 @@ public class Game implements Actor.ActorHandler, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		String actionCmd = actionEvent.getActionCommand();
-		System.out.println("A button was clicked");
 		switch (actionCmd) {
 
 		case ATTACK:
@@ -99,8 +97,6 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			Ability ability = new Ability("str", "ac", 1, null, null, true, true, 1, -1);
 			
 			Weapon weapon = attacker.getEquipedWeapon();
-			
-			System.out.println(weapon.getName());
 			
 			int[] targets = Attack.getPossibleTargets(attacker, ability, weapon, world);
 

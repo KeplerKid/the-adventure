@@ -52,8 +52,8 @@ intimidate=+2
 
 [weapon]
 type=weapon
-name=Gobby's Maul of MOTHERFUCK'N DOOM, BITCHES!
-dice=8d12
+name=Tikquor's Greataxe of Nerd Slaying
+dice=16d60
 hands=2
 reach=1
 enhancementLevel=0
