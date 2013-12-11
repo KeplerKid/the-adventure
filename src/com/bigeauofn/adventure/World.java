@@ -3,6 +3,7 @@ package com.bigeauofn.adventure;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -26,12 +27,14 @@ public class World extends JPanel implements MouseListener {
 	private ArrayList<Doodad> doodads = new ArrayList<Doodad>();
 	private Actor selectedActor;
 
+	private Actor selectedTarget;
+
 	private class MoveActionYay extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
 		private int xDiff = 0;
 		private int yDiff = 0;
-		
+
 		public MoveActionYay(int xDiff, int yDiff) {
 			this.xDiff = xDiff;
 			this.yDiff = yDiff;
@@ -50,17 +53,21 @@ public class World extends JPanel implements MouseListener {
 
 	public World() {
 		setBackground(Color.DARK_GRAY);
-		
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("typed a"), "moveLeft");
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("typed a"), "moveLeft");
 		getActionMap().put("moveLeft", new MoveActionYay(-1, 0));
-		
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("typed d"), "moveRight");
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("typed d"), "moveRight");
 		getActionMap().put("moveRight", new MoveActionYay(1, 0));
-		
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("typed w"), "moveUp");
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("typed w"), "moveUp");
 		getActionMap().put("moveUp", new MoveActionYay(0, -1));
-		
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("typed s"), "moveDown");
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("typed s"), "moveDown");
 		getActionMap().put("moveDown", new MoveActionYay(0, 1));
 	}
 
@@ -150,7 +157,7 @@ public class World extends JPanel implements MouseListener {
 		}
 
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// System.out.println("mouse clicked");
@@ -171,14 +178,55 @@ public class World extends JPanel implements MouseListener {
 		// System.out.println("mouse pressed");
 	}
 
+	/**
+	 * left click will set the actor as "selected". Right click will set the
+	 * actor as the "target".
+	 * 1 is left click
+	 * 2 is middle mouse
+	 * 3 is right click
+	 * 4 is close thumb
+	 * 5 is far thumb
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
+
+		System.out.println("mouse button: " + e.getButton());
+		
 		int[] tile = convertMoiseCoordToTile(e);
+
 		for (Actor a : actors) {
 			if (a.isAtLocation(tile)) {
-				selectActor(a);
+
+				if (e.getButton() == 1) {
+					// left click logic
+					System.out.println("selecting actor");
+					selectActor(a);
+
+
+				} else if (e.getButton() == 3) {
+					// right click logic
+					System.out.println("selecting target");
+					selectTarget(a);
+				}
 			}
 		}
+	}
+
+	/**
+	 * Temporary solution. Desired implementation will be getTargets(). The
+	 * method will return an ArrayList<Actor> that was within the area of the
+	 * ability's targeted square.
+	 * 
+	 * @return
+	 */
+	public Actor getTarget() {
+		System.out.println(this.selectedActor.getName() + " was retreived as a target");
+		return this.selectedTarget;
+	}
+
+	private void selectTarget(Actor a) {
+		System.out.println(this.selectedActor.getName() + " was targeted");
+		this.selectedTarget = a;
 	}
 
 	private void selectActor(Actor a) {

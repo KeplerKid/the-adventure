@@ -9,10 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.bigeauofn.adventure.models.Ability;
 import com.bigeauofn.adventure.models.Actor;
 import com.bigeauofn.adventure.models.Attack;
-import com.bigeauofn.adventure.models.Weapon;
 
 public class Game implements Actor.ActorHandler, ActionListener {
 
@@ -39,11 +37,10 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		// initialize the players
 		player = new Actor("actors/Tikquor_full.txt", this);
 		System.out.println(player.toString());
-		
+
 		badGuy = new Actor("actors/Gobby.txt", this);
 		System.out.println(badGuy.toString());
 
-		
 		// create the world
 		world = new World();
 		world.addActor(player);
@@ -52,9 +49,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		// setup the frame
 		JFrame gameFrame = new JFrame("The Adventure");
 		gameFrame.setLayout(new BorderLayout());
-		gameFrame.setSize(boardSideLength  , boardSideLength
-				+  infoAreaHeight);
-		
+		gameFrame.setSize(boardSideLength, boardSideLength + infoAreaHeight);
 
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -64,15 +59,15 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		// setup the menu panel
 		actorName = new JLabel("Unknown");
 		actorHP = new JLabel("-1");
-		
+
 		attackBtn = new JButton("Attack!");
 		attackBtn.setActionCommand(ATTACK);
-		//Added an explicit actionListener
+		// Added an explicit actionListener
 		attackBtn.addActionListener(this);
 
 		menu = new MenuPanel();
 
-		//menu.setSize(640, 600);
+		// menu.setSize(640, 600);
 		menu.add(actorName);
 		menu.add(actorHP);
 		menu.add(attackBtn);
@@ -98,19 +93,20 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		switch (actionCmd) {
 
 		case ATTACK:
-			
-			Actor attacker = world.getSelectedActor();
-			
-			int[] targets = Attack.getPossibleTargets(attacker,  world);
 
-			// TODO handle Area of Effect attacks
-			Actor target = badGuy;
-			
-			
-//			Weapon weapon = attacker.getEquipedWeapon();
-			
-			Attack attack = new Attack(attacker, target);
-			attack.resolve();
+			if (world.getTarget() != null) {
+				Actor attacker = world.getSelectedActor();
+
+//				int[] targets = Attack.getPossibleTargets(attacker, world);
+
+				// TODO handle Area of Effect attacks
+				Actor target = world.getTarget();
+
+				// Weapon weapon = attacker.getEquipedWeapon();
+
+				Attack attack = new Attack(attacker, target);
+				attack.resolve();
+			}
 			break;
 
 		default:
@@ -120,9 +116,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 	private Actor displayTargetSelector(ArrayList<Actor> targetChoices) {
 		Actor target = null;
-		
+
 		return target;
 	}
-	
 
 }
