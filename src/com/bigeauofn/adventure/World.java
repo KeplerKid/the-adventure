@@ -181,6 +181,7 @@ public class World extends JPanel implements MouseListener {
 	/**
 	 * left click will set the actor as "selected". Right click will set the
 	 * actor as the "target".
+	 * On my mouse (Logitech G5) the getButton() values are as follows:
 	 * 1 is left click
 	 * 2 is middle mouse
 	 * 3 is right click
@@ -190,8 +191,6 @@ public class World extends JPanel implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
-		System.out.println("mouse button: " + e.getButton());
-		
 		int[] tile = convertMoiseCoordToTile(e);
 
 		for (Actor a : actors) {
@@ -199,13 +198,11 @@ public class World extends JPanel implements MouseListener {
 
 				if (e.getButton() == 1) {
 					// left click logic
-					System.out.println("selecting actor");
 					selectActor(a);
 
 
 				} else if (e.getButton() == 3) {
 					// right click logic
-					System.out.println("selecting target");
 					selectTarget(a);
 				}
 			}
@@ -224,6 +221,10 @@ public class World extends JPanel implements MouseListener {
 		return this.selectedTarget;
 	}
 
+	/**
+	 * should be addTarget, this will better handle area attacks
+	 * @param a
+	 */
 	private void selectTarget(Actor a) {
 		System.out.println(this.selectedActor.getName() + " was targeted");
 		this.selectedTarget = a;
