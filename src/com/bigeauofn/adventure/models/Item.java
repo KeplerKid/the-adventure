@@ -21,7 +21,6 @@ public class Item {
 	}
 
 	public void addAttribute(String name, int value, String type) {
-		System.out.println(value);
 		Attribute toAdd = new Attribute(name, value, type);
 		this.attributes.put(name, toAdd);
 	}
@@ -56,7 +55,7 @@ public class Item {
 		sb.append(this.attributes.size());
 		sb.append(" Attributes\n");
 		for (Attribute a : this.attributes.values()) {
-			sb.append(a.toString());
+			sb.append("\t" + a.toString());
 		}
 		sb.append(" and Has ");
 		sb.append(this.dice.size());

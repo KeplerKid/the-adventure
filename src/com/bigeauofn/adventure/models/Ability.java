@@ -1,48 +1,29 @@
 package com.bigeauofn.adventure.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import com.bigeauofn.adventure.dicebag.*;
 
 public class Ability {
 
+	private String type;
+	private String name;
 	private String source;
 	private String defense;
 	private int range;
-	private ArrayList<Effect> effects;
-	private ArrayList<Requirement> requirements;
+	private ArrayList<String> effects;
+	private ArrayList<String> requirements;
 	private boolean usesProficiencyBonus;
 	private boolean usesWeapon;
-	private int damageDieCount;
-	private int damageDieSides;
-	
-	public int getDamageDieCount() {
-		return damageDieCount;
-	}
+	private ArrayList<Dice> dice;
 
-	public void setDamageDieCount(int damageDieCount) {
-		this.damageDieCount = damageDieCount;
-	}
+	public Ability(String source, String defense, int range,
+			ArrayList<String> effects, ArrayList<String> requirements,
+			boolean usesProficiencyBonus, boolean usesWeapon,
+			ArrayList<Dice> dice) {
 
-	public int getDamageDieSides() {
-		return damageDieSides;
-	}
-
-	public void setDamageDieSides(int damageDieSides) {
-		this.damageDieSides = damageDieSides;
-	}
-
-	
-
-	public Ability(
-			String source,
-			String defense,
-			int range,
-			ArrayList<Effect> effects,
-			ArrayList<Requirement> requirements,
-			boolean usesProficiencyBonus,
-			boolean usesWeapon,
-			int damageDieCount,
-			int damageDieSides) {
-		
 		this.source = source;
 		this.defense = defense;
 		this.range = range;
@@ -50,8 +31,22 @@ public class Ability {
 		this.requirements = requirements;
 		this.usesProficiencyBonus = usesProficiencyBonus;
 		this.usesWeapon = usesWeapon;
-		this.damageDieCount = damageDieCount;
-		this.damageDieSides = damageDieSides;
+		this.dice = dice;
+	}
+
+	public Ability(HashMap<String, String> ability) {
+		this.type = ability.get("type");
+		this.name = ability.get("name");
+		this.source = ability.get("source");
+		this.range = Integer.parseInt(ability.get("range"));
+		this.effects = new ArrayList<String>(Arrays.asList(ability.get(
+				"effects").split(",")));
+		this.requirements = new ArrayList<String>(Arrays.asList(ability.get(
+				"requirements").split(",")));
+		this.usesProficiencyBonus = Boolean.parseBoolean(ability
+				.get("usesproficiencybonus"));
+		this.usesWeapon = Boolean.parseBoolean("usesweapon");
+		this.dice = DiceFactory.getDice(ability.get("dice"));
 	}
 
 	public boolean isUsesWeapon() {
@@ -86,21 +81,16 @@ public class Ability {
 		this.range = range;
 	}
 
-	public ArrayList<Effect> getEffects() {
+	public ArrayList<String> getEffects() {
 		return effects;
 	}
 
-	public void setEffects(ArrayList<Effect> effects) {
-		this.effects = effects;
-	}
+	
 
-	public ArrayList<Requirement> getRequirements() {
+	public ArrayList<String> getRequirements() {
 		return requirements;
 	}
 
-	public void setRequirements(ArrayList<Requirement> requirements) {
-		this.requirements = requirements;
-	}
 
 	public boolean isUsesProficiencyBonus() {
 		return usesProficiencyBonus;
@@ -110,7 +100,34 @@ public class Ability {
 		this.usesProficiencyBonus = usesProficiencyBonus;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Ability Named -");
+		sb.append(this.name);
+		sb.append("\n Type - ");
+		sb.append(this.type);
+		sb.append("\n Source - ");
+		sb.append(this.source);
+		sb.append("\n range -");
+		sb.append(this.range);
+		for (String s : this.effects) {
+			sb.append("\n\tEffect - " + s);
+		}
+		for (String s : this.requirements) {
+			sb.append("\n\t requirement - " + s);
+		}
+		sb.append("\nUses Profeciency Bonus - ");
+		sb.append(this.usesProficiencyBonus);
+		sb.append("\nUses Weapon - ");
+		sb.append(this.usesWeapon);
+		sb.append("Dice Count - ");
+		sb.append(this.dice.size());
+		sb.append("\n");
+		for (Dice d : this.dice) {
+			sb.append("\t" + d.toString());
+		}
+		return sb.toString();
+	}
 
-	
 }

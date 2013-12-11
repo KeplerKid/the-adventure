@@ -45,6 +45,17 @@ enhancementLevel=0
 proficiencyBonus=2
 group=axe
 
+[ability]
+type=magic
+name=Mega Supper Damage +12
+source=faraway
+range=10
+effects=kill,murder,maim
+requirements=strength,iron,will
+usesproficiencybonus=true
+usesweapon=false
+dice=2d10
+
 [item]
 type=armor
 name=Cloak of Intimidation
@@ -56,7 +67,7 @@ name=Tikquor's Greataxe of Nerd Slaying
 dice=16d60
 hands=2
 reach=1
-enhancementLevel=0
+enhancementLevel=4
 proficiencyBonus=2
 group=hammer
 

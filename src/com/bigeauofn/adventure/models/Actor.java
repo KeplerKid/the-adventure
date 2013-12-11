@@ -36,6 +36,7 @@ public class Actor {
 	private HashMap<String, String> stats;
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
+	private ArrayList<Ability> abilities;
 	
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
 	// bluff, diplomancy, dungeoneering, endurance, heal, history,
@@ -68,6 +69,7 @@ public class Actor {
 		diceSet = DiceFactory.getDiceSet();
 		
 		weapons = fp.getWeapons();
+		abilities = fp.getAbilities();
 
 	}
 
@@ -88,6 +90,44 @@ public class Actor {
 
 	public void setEquipedWeapon(Weapon equipedWeapon) {
 		this.equipedWeapon = equipedWeapon;
+	}
+	public Ability getAbility(){
+		int rand = (int) (Math.random() * 100) % abilities.size();
+		return abilities.get(rand);
+	}
+	public RollResult InflictDamage(RollResult d20result){
+
+		RollResult damageRolls = null;
+		
+		
+		
+		// TODO currently only handles attacks with weapons, not abilities
+		//if (this.getAbility().isUsesWeapon()) {
+			// TODO make a critical weapon roll
+		//} else {
+
+		//}
+		
+		Weapon toUse = this.getEquipedWeapon();
+		
+		if (!d20result.isCritical()) {
+
+			damageRolls = toUse.rollWeaponDice();
+
+		} else {
+			// max damage
+			damageRolls = toUse.getCriticalDamage();
+		}
+
+		// add damage modifiers
+		int damage = toUse.getEnhancementLevel();
+		//damage += (this.getStatInteger(this.getAbility().getSource()) - 10) / 2;
+		damageRolls.addModifier(damage);
+
+
+
+		System.out.println(damageRolls + " damage dealt");
+		return damageRolls;
 	}
 
 	public int getStatInteger(String stat) {
@@ -207,6 +247,46 @@ public class Actor {
 		this.currentHP.subtractHitPoints(damageDealt.getDamage());
 		// updateUI
 		System.out.println(this.name + ": " + currentHP);
+	}
+	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("------------------------------------------------------\n");
+		sb.append("Actor named - ");
+		sb.append(this.name);
+		sb.append("\n");
+		//sb.append("Avatar file - ");
+		//sb.append(avatar);
+		//sb.append("\n");
+		sb.append("Weapons Counts - ");
+		sb.append(this.weapons.size());
+		for(Weapon w : this.weapons){
+			sb.append("\t" + w.toString());
+		}
+		sb.append("\n");
+		sb.append("Current Hit Points - ");
+		sb.append(this.currentHP);
+		sb.append("\n");
+		for(String s : this.stats.keySet()){
+			sb.append("\tStat - " + s + ", Value - " + this.stats.get(s) +"\n");
+		}
+		sb.append("\n");
+		for(Integer i : this.diceSet.keySet()){
+			sb.append("\t"+this.diceSet.get(i).toString());
+		}
+		sb.append("\n");
+		sb.append("Weapon Count - ");
+		sb.append(this.weapons.size());
+		sb.append("\n");
+		for(Weapon w : this.weapons){
+			sb.append("\n\t"+w.toString());
+		}
+		for(Ability a : this.abilities){
+			sb.append("\n\t"+a.toString());
+		}
+		sb.append("------------------------------------------------------\n");
+		return sb.toString();
 	}
 
 }

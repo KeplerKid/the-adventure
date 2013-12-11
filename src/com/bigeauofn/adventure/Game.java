@@ -38,8 +38,12 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 		// initialize the players
 		player = new Actor("actors/Tikquor_full.txt", this);
+		System.out.println(player.toString());
+		
 		badGuy = new Actor("actors/Gobby.txt", this);
+		System.out.println(badGuy.toString());
 
+		
 		// create the world
 		world = new World();
 		world.addActor(player);
@@ -48,8 +52,9 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		// setup the frame
 		JFrame gameFrame = new JFrame("The Adventure");
 		gameFrame.setLayout(new BorderLayout());
-		gameFrame.setSize(boardSideLength + xScreenFudge, boardSideLength
-				+ yScreenFudge + infoAreaHeight);
+		gameFrame.setSize(boardSideLength  , boardSideLength
+				+  infoAreaHeight);
+		
 
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -66,6 +71,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		attackBtn.addActionListener(this);
 
 		menu = new MenuPanel();
+
+		//menu.setSize(640, 600);
 		menu.add(actorName);
 		menu.add(actorHP);
 		menu.add(attackBtn);
@@ -94,11 +101,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			
 			Actor attacker = world.getSelectedActor();
 			
-			Ability ability = new Ability("str", "ac", 1, null, null, true, true, 1, -1);
-			
-			Weapon weapon = attacker.getEquipedWeapon();
-			
-			int[] targets = Attack.getPossibleTargets(attacker, ability, weapon, world);
+			int[] targets = Attack.getPossibleTargets(attacker,  world);
 
 			// TODO handle Area of Effect attacks
 			Actor target = badGuy;
@@ -106,8 +109,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 			
 //			Weapon weapon = attacker.getEquipedWeapon();
 			
-			Attack attack = new Attack(attacker, target,
-					ability, weapon);
+			Attack attack = new Attack(attacker, target);
 			attack.resolve();
 			break;
 

@@ -14,9 +14,6 @@ public class Weapon {
 	private int handsToWield;
 	private int reach;
 
-	// TODO replace these two integers with a dice
-	private int numDice;
-	private int numSides;
 
 	// TODO actually make it use dice
 	private ArrayList<Dice> dice;
@@ -32,8 +29,7 @@ public class Weapon {
 		this.name = name;
 		this.handsToWield = handsToWield;
 		this.reach = reach;
-		this.numDice = numDice;
-		this.numSides = numSides;
+		this.dice = DiceFactory.getDice(numDice+"d"+ numSides);
 		this.proficiencyBonus = proficiencyBonus;
 		this.enhancementLevel = enhancementLevel;
 	}
@@ -50,72 +46,32 @@ public class Weapon {
 		this.group = weapon.get("group");
 	}
 
-	public ArrayList<Dice> getDice() {
-		return dice;
-	}
+
 
 	public String getGroup() {
 		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public int getHandsToWield() {
 		return handsToWield;
-	}
-
-	public void setHandsToWield(int handsToWield) {
-		this.handsToWield = handsToWield;
 	}
 
 	public int getReach() {
 		return reach;
 	}
 
-	public void setReach(int reach) {
-		this.reach = reach;
-	}
-
-	public int getNumDice() {
-		return numDice;
-	}
-
-	public void setNumDice(int numDice) {
-		this.numDice = numDice;
-	}
-
-	public int getNumSides() {
-		return numSides;
-	}
-
-	public void setNumSides(int numSides) {
-		this.numSides = numSides;
-	}
 
 	public int getProficiencyBonus() {
 		return proficiencyBonus;
 	}
 
-	public void setProficiencyBonus(int proficiencyBonus) {
-		this.proficiencyBonus = proficiencyBonus;
-	}
-
 	public int getEnhancementLevel() {
 		return enhancementLevel;
-	}
-
-	public void setEnhancementLevel(int enhancementLevel) {
-		this.enhancementLevel = enhancementLevel;
 	}
 
 	public RollResult rollWeaponDice() {
@@ -144,5 +100,35 @@ public class Weapon {
 		}
 		return toReturn;
 	}
-
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("Weapon Named ");
+		sb.append(this.name);
+		sb.append("\n");
+		sb.append("Hands to Wield - ");
+		sb.append(this.handsToWield);
+		sb.append("\n");
+		sb.append("Reach - ");
+		sb.append(this.reach);
+		sb.append("\n");
+		sb.append("Dice Count - ");
+		sb.append(this.dice.size());
+		sb.append("\n");
+		for(Dice d : this.dice){
+			sb.append("\t" + d.toString());
+		}
+		sb.append("Proficiency Bonus - ");
+		sb.append(this.proficiencyBonus); 
+		sb.append("\n");
+		sb.append("Enhancement Level - ");
+		sb.append(this.enhancementLevel);
+		sb.append("\n");
+		sb.append("Group - ");
+		sb.append(this.group);
+		sb.append("\n");
+		
+		return sb.toString();
 	}
+
+}
