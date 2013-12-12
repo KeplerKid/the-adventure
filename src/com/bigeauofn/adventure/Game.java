@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -80,16 +79,16 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		menu.add(actorHP);
 		menu.add(attackBtn);
 		
-		JList<Weapon> jList = new JList(world.getSelectedActor().getWeaponList());
-		weaponList = jList;
+		weaponList = new JList<Weapon>();
+		weaponList.setListData(world.getSelectedActor().getWeaponList());
 		weaponList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		weaponList.setLayoutOrientation(JList.VERTICAL);
 		weaponList.setVisibleRowCount(-1);
 		JScrollPane weaponListScroller = new JScrollPane(weaponList);
 		weaponListScroller.setPreferredSize(new Dimension(250, 80));
 		
-		JList<Ability>  jList2 = new JList(world.getSelectedActor().getAbilityList());
-		abilityList = jList2;
+		abilityList = new JList<Ability>();
+		abilityList.setListData(world.getSelectedActor().getAbilityList());
 		abilityList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		abilityList.setLayoutOrientation(JList.VERTICAL);
 		abilityList.setVisibleRowCount(-1);
@@ -113,7 +112,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		actorHP.setText(actor.getCurrentHP() + "");
 		
 		menu.remove(weaponList);
-		JList<Weapon> jList = new JList(actor.getWeaponList());
+		JList<Weapon> jList = new JList<Weapon>(actor.getWeaponList());
 		weaponList = jList;
 		weaponList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weaponList.setLayoutOrientation(JList.VERTICAL);
@@ -123,7 +122,7 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		weaponListScroller.setPreferredSize(new Dimension(250, 80));
 		
 		menu.remove(abilityList);
-		JList<Ability>  jList2 = new JList(actor.getAbilityList());
+		JList<Ability>  jList2 = new JList<Ability>(actor.getAbilityList());
 		abilityList = jList2;
 		abilityList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		abilityList.setLayoutOrientation(JList.VERTICAL);
@@ -161,10 +160,10 @@ public class Game implements Actor.ActorHandler, ActionListener {
 				// TODO handle Area of Effect attacks
 				Actor target = world.getTarget();
 				attacker.setEquipedWeapon(null);
-				attacker.setEquipedWeapon((Weapon) weaponList.getSelectedValue());
+				attacker.setEquipedWeapon(weaponList.getSelectedValue());
 				System.out.println(attacker.getEquipedWeapon());
 				
-				attacker.setSelectedAbility((Ability) abilityList.getSelectedValue());
+				attacker.setSelectedAbility(abilityList.getSelectedValue());
 				System.out.println(attacker.getSelectedAbility());
 				Attack attack = new Attack(attacker, target);
 				
@@ -175,12 +174,6 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		default:
 
 		}
-	}
-
-	private Actor displayTargetSelector(ArrayList<Actor> targetChoices) {
-		Actor target = null;
-
-		return target;
 	}
 
 }

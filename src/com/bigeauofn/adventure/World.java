@@ -19,8 +19,8 @@ public class World extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private int xTileSize = 80;
-	private int yTileSize = 80;
+	private int xTileSize = 78;
+	private int yTileSize = 78;
 
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private ArrayList<Doodad> doodads = new ArrayList<Doodad>();
@@ -28,22 +28,19 @@ public class World extends JPanel implements MouseListener {
 	private Actor selectedActor;
 	private Actor selectedTarget;
 
-	private class MoveActionYay extends AbstractAction {
+	private class MoveAction extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
 		private int xDiff = 0;
 		private int yDiff = 0;
 
-		public MoveActionYay(int xDiff, int yDiff) {
+		public MoveAction(int xDiff, int yDiff) {
 			this.xDiff = xDiff;
 			this.yDiff = yDiff;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("yay");
-			System.out.println(xDiff);
-			System.out.println(yDiff);
 			updateActorPosition(selectedActor, new int[] { xDiff, yDiff });
 			repaint();
 		}
@@ -55,19 +52,19 @@ public class World extends JPanel implements MouseListener {
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("typed a"), "moveLeft");
-		getActionMap().put("moveLeft", new MoveActionYay(-1, 0));
+		getActionMap().put("moveLeft", new MoveAction(-1, 0));
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("typed d"), "moveRight");
-		getActionMap().put("moveRight", new MoveActionYay(1, 0));
+		getActionMap().put("moveRight", new MoveAction(1, 0));
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("typed w"), "moveUp");
-		getActionMap().put("moveUp", new MoveActionYay(0, -1));
+		getActionMap().put("moveUp", new MoveAction(0, -1));
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke("typed s"), "moveDown");
-		getActionMap().put("moveDown", new MoveActionYay(0, 1));
+		getActionMap().put("moveDown", new MoveAction(0, 1));
 	}
 
 	public ArrayList<Actor> getCharacters() {
@@ -112,13 +109,36 @@ public class World extends JPanel implements MouseListener {
 			int xLoc = c.getLocation()[0];
 			int yLoc = c.getLocation()[1];
 
-			// System.out.println("Drawing " + c.getName() + " at " + xLoc *
-			// xTileSize + ", " + yLoc + yTileSize);
-			g.drawImage(c.getAvatar(), xLoc * xTileSize, yLoc * yTileSize, null);
+			int xPixelLoc = xLoc * xTileSize;
+			int yPixelLoc = yLoc * yTileSize;
+
+			g.drawImage(c.getAvatar(), xPixelLoc, yPixelLoc, null);
+
+			// draw a blue rectangle around the selectedActor
+			if (this.selectedActor != null && c.equals(this.selectedActor)) {
+
+				Color oldColor = g.getColor();
+				g.setColor(Color.BLUE);
+				g.drawRect(xPixelLoc, yPixelLoc, xTileSize, yTileSize);
+				g.setColor(oldColor);
+
+			}
+
+			// draw a red rectangle around the selected target
+			if (this.selectedTarget != null && c.equals(this.selectedTarget)) {
+
+				Color oldColor = g.getColor();
+				g.setColor(Color.RED);
+				g.drawRect(xPixelLoc + 2, yPixelLoc + 2, xTileSize - 4,
+						yTileSize - 4);
+				g.setColor(oldColor);
+			}
 
 		}
 
 		// consider doodads drawn OVER the characters
+		// alternatively consider a "depth" value, with actors being closer to
+		// the "surface" upon a tie
 
 	}
 
@@ -157,56 +177,6 @@ public class World extends JPanel implements MouseListener {
 
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// System.out.println("mouse clicked");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// System.out.println("mouse entered");
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// System.out.println("mouse exited");
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// System.out.println("mouse pressed");
-	}
-
-	/**
-	 * left click will set the actor as "selected". Right click will set the
-	 * actor as the "target".
-	 * On my mouse (Logitech G5) the getButton() values are as follows:
-	 * 1 is left click
-	 * 2 is middle mouse
-	 * 3 is right click
-	 * 4 is close thumb
-	 * 5 is far thumb
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-
-		int[] tile = convertMoiseCoordToTile(e);
-
-		for (Actor a : actors) {
-			if (a.isAtLocation(tile)) {
-
-				if (e.getButton() == 1) {
-					// left click logic
-					selectActor(a);
-
-
-				} else if (e.getButton() == 3) {
-					// right click logic
-					selectTarget(a);
-				}
-			}
-		}
-	}
 
 	/**
 	 * Temporary solution. Desired implementation will be getTargets(). The
@@ -220,21 +190,25 @@ public class World extends JPanel implements MouseListener {
 			System.out.println("no target was selected by " + this.getName());
 			return null;
 		}
-		System.out.println(this.selectedTarget.getName() + " was retreived as a target");
+		System.out.println(this.selectedTarget.getName()
+				+ " was retreived as a target");
 		return this.selectedTarget;
 	}
 
 	/**
 	 * should be addTarget, this will better handle area attacks
+	 * 
 	 * @param a
 	 */
 	private void selectTarget(Actor a) {
 		System.out.println(a.getName() + " was targeted");
+		repaint();
 		this.selectedTarget = a;
 	}
 
 	private void selectActor(Actor a) {
 		selectedActor = a;
+		repaint();
 		a.select();
 	}
 
@@ -256,5 +230,48 @@ public class World extends JPanel implements MouseListener {
 
 		return tileLoc;
 	}
+	
+	/**
+	 * left click will set the actor as "selected". Right click will set the
+	 * actor as the "target". On my mouse (Logitech G5) the getButton() values
+	 * are as follows: 1 is left click 2 is middle mouse 3 is right click 4 is
+	 * close thumb 5 is far thumb
+	 */
+	@Override
+	public void mouseReleased(MouseEvent e) {
 
+		int[] tile = convertMoiseCoordToTile(e);
+
+		for (Actor a : actors) {
+			if (a.isAtLocation(tile)) {
+
+				if (e.getButton() == 1) {
+					// left click logic
+					selectActor(a);
+
+				} else if (e.getButton() == 3) {
+					// right click logic
+					selectTarget(a);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	
 }
