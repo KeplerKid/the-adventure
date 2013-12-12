@@ -62,16 +62,20 @@ public class Ability {
 	 */
 	public RollResult getAbilityAttackBonuses(Actor attacker,
 			RollResult attackRoll) {
+		System.out.println("getAbilAtkBonus: " + this.name);
 		int sumBonuses = 0;
 		Weapon w = attacker.getEquipedWeapon();
 
 		sumBonuses += (attacker.getStatInteger(source) - 10) / 2;
-
+		System.out.println("Bonus from " + source + ": " + sumBonuses);
+		
 		if (this.usesProficiencyBonus) {
+			System.out.println("adding proficiency bonus of " + w.getProficiencyBonus());
 			sumBonuses += w.getProficiencyBonus();
 		}
 
 		if (this.usesWeapon) {
+			System.out.println("adding ehancement bonus of " + w.getEnhancementLevel());
 			sumBonuses += w.getEnhancementLevel();
 		}
 
@@ -80,6 +84,12 @@ public class Ability {
 		return attackRoll;
 	}
 
+	// TODO need to iterate through appropriate effects
+	// not all abilities add the Source as 
+	public RollResult addAbilityBonusDamage(Actor attacker, RollResult dm) {
+		dm.addModifier((attacker.getStatInteger(source) - 10) / 2);
+		return dm;
+	}
 	public boolean isUsesWeapon() {
 		return usesWeapon;
 	}
@@ -131,8 +141,9 @@ public class Ability {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Ability Named -");
+//		sb.append("Ability Named -");
 		sb.append(this.name);
+		/*
 		sb.append("\n Type - ");
 		sb.append(this.type);
 		sb.append("\n Source - ");
@@ -155,6 +166,7 @@ public class Ability {
 		for (Dice d : this.dice) {
 			sb.append("\t" + d.toString());
 		}
+		*/
 		return sb.toString();
 	}
 

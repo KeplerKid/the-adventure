@@ -26,11 +26,11 @@ intimidate=trained
 
 [weapon]
 type=weapon
-name=Greataxe +1
+name=Greataxe +4
 dice=1d12
 hands=2
 reach=1
-enhancementLevel=1
+enhancementLevel=4
 proficiencyBonus=2
 group=axe
 ;property=high crit

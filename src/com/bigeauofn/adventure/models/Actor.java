@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.jws.Oneway;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.bigeauofn.adventure.dicebag.AttackRoll;
 import com.bigeauofn.adventure.dicebag.DamageRoll;
@@ -74,14 +76,6 @@ public class Actor {
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 
-		// set random ability
-		int rand = (int) (Math.random() * 100) % this.abilities.size();
-		this.selectedAbility = this.abilities.get(rand);
-		
-		// set random weapon
-		rand = (int) (Math.random() * 100) % weapons.size();
-		this.equipedWeapon = this.weapons.get(rand);
-		
 	}
 
 	public RollResult rollDice(Integer i) {
@@ -107,13 +101,6 @@ public class Actor {
 	public RollResult InflictDamage(RollResult d20result) {
 
 		RollResult damageRolls = null;
-
-		// TODO currently only handles attacks with weapons, not abilities
-		// if (this.getAbility().isUsesWeapon()) {
-		// TODO make a critical weapon roll
-		// } else {
-
-		// }
 
 		Weapon toUse = this.getEquipedWeapon();
 
@@ -294,6 +281,37 @@ public class Actor {
 		}
 		sb.append("------------------------------------------------------\n");
 		return sb.toString();
+	}
+
+	
+	/**
+	 * used for creation of JList in the UI
+	 * @return
+	 */
+	public Object[] getWeaponList() {
+		for (Weapon w : weapons) {
+			System.out.println(w);
+		}
+		return weapons.toArray();
+	}
+
+	/**
+	 * used for creation of JList in the UI
+	 * @return
+	 */	
+	public Object[] getAbilityList() {
+		for (Ability a : abilities) {
+			System.out.println(a);
+		}
+		return abilities.toArray();
+	}
+
+	public void setSelectedAbility(Ability selectedValue) {
+		this.selectedAbility = selectedValue;
+	}
+
+	public Ability getSelectedAbility() {
+		return selectedAbility;
 	}
 
 }

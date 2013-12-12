@@ -24,8 +24,8 @@ public class World extends JPanel implements MouseListener {
 
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private ArrayList<Doodad> doodads = new ArrayList<Doodad>();
-	private Actor selectedActor;
 
+	private Actor selectedActor;
 	private Actor selectedTarget;
 
 	private class MoveActionYay extends AbstractAction {
@@ -216,6 +216,10 @@ public class World extends JPanel implements MouseListener {
 	 * @return
 	 */
 	public Actor getTarget() {
+		if (this.selectedTarget == null) {
+			System.out.println("no target was selected by " + this.getName());
+			return null;
+		}
 		System.out.println(this.selectedTarget.getName() + " was retreived as a target");
 		return this.selectedTarget;
 	}

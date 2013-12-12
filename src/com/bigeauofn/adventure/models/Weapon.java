@@ -103,8 +103,9 @@ public class Weapon {
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("Weapon Named ");
+//		sb.append("Weapon Named ");
 		sb.append(this.name);
+	/*
 		sb.append(" Hands to Wield - ");
 		sb.append(this.handsToWield);
 		sb.append(" Reach - ");
@@ -120,7 +121,7 @@ public class Weapon {
 		sb.append(this.enhancementLevel); 
 		sb.append(" Group - ");
 		sb.append(this.group); 
-		
+		*/
 		return sb.toString();
 	}
 

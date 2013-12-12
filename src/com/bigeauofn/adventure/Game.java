@@ -1,6 +1,7 @@
 package com.bigeauofn.adventure;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,9 +9,14 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
+import com.bigeauofn.adventure.models.Ability;
 import com.bigeauofn.adventure.models.Actor;
 import com.bigeauofn.adventure.models.Attack;
+import com.bigeauofn.adventure.models.Weapon;
 
 public class Game implements Actor.ActorHandler, ActionListener {
 
@@ -31,6 +37,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 	private JLabel actorName;
 	private JLabel actorHP;
 	private JButton attackBtn;
+	private JList<Ability> abilityList;
+	private JList<Weapon> weaponList;
 
 	public Game() {
 
@@ -71,7 +79,25 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		menu.add(actorName);
 		menu.add(actorHP);
 		menu.add(attackBtn);
-
+		
+		JList<Weapon> jList = new JList(world.getSelectedActor().getWeaponList());
+		weaponList = jList;
+		weaponList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		weaponList.setLayoutOrientation(JList.VERTICAL);
+		weaponList.setVisibleRowCount(-1);
+		JScrollPane weaponListScroller = new JScrollPane(weaponList);
+		weaponListScroller.setPreferredSize(new Dimension(250, 80));
+		
+		JList<Ability>  jList2 = new JList(world.getSelectedActor().getAbilityList());
+		abilityList = jList2;
+		abilityList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		abilityList.setLayoutOrientation(JList.VERTICAL);
+		abilityList.setVisibleRowCount(-1);
+		JScrollPane abilityListScroller = new JScrollPane(abilityList);
+		abilityListScroller.setPreferredSize(new Dimension(250, 80));
+		
+		menu.add(weaponList);
+		menu.add(abilityList);
 		gameFrame.add(menu, BorderLayout.SOUTH);
 
 		gameFrame.setVisible(true);
@@ -85,6 +111,31 @@ public class Game implements Actor.ActorHandler, ActionListener {
 	public void onActorClicked(Actor actor) {
 		actorName.setText(actor.getName());
 		actorHP.setText(actor.getCurrentHP() + "");
+		
+		menu.remove(weaponList);
+		JList<Weapon> jList = new JList(actor.getWeaponList());
+		weaponList = jList;
+		weaponList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		weaponList.setLayoutOrientation(JList.VERTICAL);
+		weaponList.setVisibleRowCount(-1);
+		weaponList.setSelectedIndex(0);
+		JScrollPane weaponListScroller = new JScrollPane(weaponList);
+		weaponListScroller.setPreferredSize(new Dimension(250, 80));
+		
+		menu.remove(abilityList);
+		JList<Ability>  jList2 = new JList(actor.getAbilityList());
+		abilityList = jList2;
+		abilityList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		abilityList.setLayoutOrientation(JList.VERTICAL);
+		abilityList.setVisibleRowCount(-1);
+		abilityList.setSelectedIndex(0);
+		JScrollPane abilityListScroller = new JScrollPane(abilityList);
+		abilityListScroller.setPreferredSize(new Dimension(250, 80));
+		
+		menu.add(weaponList);
+		menu.add(abilityList);
+		
+		menu.repaint();
 	}
 
 
@@ -109,7 +160,12 @@ public class Game implements Actor.ActorHandler, ActionListener {
 
 				// TODO handle Area of Effect attacks
 				Actor target = world.getTarget();
-
+				attacker.setEquipedWeapon(null);
+				attacker.setEquipedWeapon((Weapon) weaponList.getSelectedValue());
+				System.out.println(attacker.getEquipedWeapon());
+				
+				attacker.setSelectedAbility((Ability) abilityList.getSelectedValue());
+				System.out.println(attacker.getSelectedAbility());
 				Attack attack = new Attack(attacker, target);
 				
 				attack.resolve();

@@ -27,7 +27,7 @@ thievery=9
 
 [weapon]
 type=weapon
-name=Gobby's Maul of Death
+name=Gobby's Maul o Death
 dice=2d6
 hands=2
 reach=1
@@ -39,7 +39,7 @@ group=hammer
 
 [weapon]
 type=weapon
-name=Gobby's Maul of MOTHERFUCK'N DOOM, BITCHES!
+name=Gobby's Maul o DOOM
 dice=3d12
 hands=2
 reach=1
