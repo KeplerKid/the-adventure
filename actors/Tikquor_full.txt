@@ -61,16 +61,6 @@ type=armor
 name=Cloak of Intimidation
 intimidate=+2
 
-[weapon]
-type=weapon
-name=Tikquor's Greataxe of Nerd Slaying
-dice=16d60
-hands=2
-reach=1
-enhancementLevel=4
-proficiencyBonus=2
-group=hammer
-
 [item]
 type=armor
 name=chainmail
@@ -81,6 +71,18 @@ name=dragonborn racial
 history=+2
 intimidate=+2
 
+
+[ability]
+type=magic
+name=Big Jump +12
+source=faraway
+range=10
+effects=kill,murder,maim
+requirements=strength,iron,will
+usesproficiencybonus=true
+usesweapon=false
+dice=2d10
+
 [feat]
 name=weapon focus
 
@@ -88,3 +90,5 @@ name=weapon focus
 name=condition
 weapon=axe
 atk=+1
+
+[end]

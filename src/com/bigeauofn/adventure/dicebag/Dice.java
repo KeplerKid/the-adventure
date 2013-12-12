@@ -25,7 +25,7 @@ public class Dice {
 	
 	@Override
 	public String toString(){
-		return "A D" + this.numberOfSides  + " Dice\n";
+		return "A D" + this.numberOfSides  + " Dice";
 	}
 	
 	public RollResult rollDice(boolean isCrit) {

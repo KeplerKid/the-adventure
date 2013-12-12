@@ -256,32 +256,29 @@ public class Actor {
 		sb.append("Actor named - ");
 		sb.append(this.name);
 		sb.append("\n");
-		//sb.append("Avatar file - ");
-		//sb.append(avatar);
-		//sb.append("\n");
-		sb.append("Weapons Counts - ");
-		sb.append(this.weapons.size());
-		for(Weapon w : this.weapons){
-			sb.append("\t" + w.toString());
-		}
+
 		sb.append("\n");
 		sb.append("Current Hit Points - ");
 		sb.append(this.currentHP);
 		sb.append("\n");
 		for(String s : this.stats.keySet()){
-			sb.append("\tStat - " + s + ", Value - " + this.stats.get(s) +"\n");
+			sb.append("\n\tStat - " + s + ", Value - " + this.stats.get(s));
 		}
-		sb.append("\n");
-		for(Integer i : this.diceSet.keySet()){
-			sb.append("\t"+this.diceSet.get(i).toString());
-		}
-		sb.append("\n");
-		sb.append("Weapon Count - ");
+		
+		sb.append("\nWeapons Counts - ");
 		sb.append(this.weapons.size());
-		sb.append("\n");
 		for(Weapon w : this.weapons){
-			sb.append("\n\t"+w.toString());
+			sb.append("\n\t" + w.toString());
 		}
+
+		sb.append("\n\nPlayers Dice count - ");
+		sb.append(this.diceSet.size());
+		for(Integer i : this.diceSet.keySet()){
+			sb.append("\n\t"+this.diceSet.get(i).toString());
+		}
+		sb.append("\n");
+		sb.append("Abilities Count - ");
+		sb.append(this.abilities .size());
 		for(Ability a : this.abilities){
 			sb.append("\n\t"+a.toString());
 		}
