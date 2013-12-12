@@ -38,6 +38,7 @@ public class Ability {
 		this.type = ability.get("type");
 		this.name = ability.get("name");
 		this.source = ability.get("source");
+		this.defense = ability.get("defense");
 		this.range = Integer.parseInt(ability.get("range"));
 		this.effects = new ArrayList<String>(Arrays.asList(ability.get(
 				"effects").split(",")));
@@ -47,6 +48,36 @@ public class Ability {
 				.get("usesproficiencybonus"));
 		this.usesWeapon = Boolean.parseBoolean("usesweapon");
 		this.dice = DiceFactory.getDice(ability.get("dice"));
+	}
+
+	/**
+	 * Sums up all bonuses related to the ability itself, does not consider
+	 * feats or other effects.
+	 * 
+	 * @param attacker
+	 *            actor using the ability
+	 * @param attackRoll
+	 *            d20 attack roll used in conjunction with the ability
+	 * @return An updated RollResult with the appropriate modifiers added to it.
+	 */
+	public RollResult getAbilityAttackBonuses(Actor attacker,
+			RollResult attackRoll) {
+		int sumBonuses = 0;
+		Weapon w = attacker.getEquipedWeapon();
+
+		sumBonuses += (attacker.getStatInteger(source) - 10) / 2;
+
+		if (this.usesProficiencyBonus) {
+			sumBonuses += w.getProficiencyBonus();
+		}
+
+		if (this.usesWeapon) {
+			sumBonuses += w.getEnhancementLevel();
+		}
+
+		attackRoll.addModifier(sumBonuses);
+
+		return attackRoll;
 	}
 
 	public boolean isUsesWeapon() {
@@ -85,12 +116,9 @@ public class Ability {
 		return effects;
 	}
 
-	
-
 	public ArrayList<String> getRequirements() {
 		return requirements;
 	}
-
 
 	public boolean isUsesProficiencyBonus() {
 		return usesProficiencyBonus;
@@ -99,7 +127,7 @@ public class Ability {
 	public void setUsesProficiencyBonus(boolean usesProficiencyBonus) {
 		this.usesProficiencyBonus = usesProficiencyBonus;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

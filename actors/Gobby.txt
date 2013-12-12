@@ -51,22 +51,23 @@ group=hammer
 [ability]
 type=magic
 name=Mega Supper Damage +182
-source=faraway
+source=str
+defense=ac
 range=10
 effects=kill,murder,maim
 requirements=strength,iron,will
 usesproficiencybonus=true
-usesweapon=false
+usesweapon=true
 dice=2d10
 
 [ability]
 type=magic
 name=Cloak of Invisibility +200
-source=close
+source=dex
 range=10
 effects=addstealth,addinitiative
 requirements=cloak,leather,shoes
-usesproficiencybonus=true
+usesproficiencybonus=false
 usesweapon=false
 dice=3d4
 

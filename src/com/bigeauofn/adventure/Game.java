@@ -87,6 +87,14 @@ public class Game implements Actor.ActorHandler, ActionListener {
 		actorHP.setText(actor.getCurrentHP() + "");
 	}
 
+
+	@Override
+	public void onActorHitPointChange(Actor actor) {
+		if (world.getSelectedActor().equals(actor)) {
+			actorHP.setText(actor.getCurrentHP() + "");
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		String actionCmd = actionEvent.getActionCommand();
@@ -102,9 +110,8 @@ public class Game implements Actor.ActorHandler, ActionListener {
 				// TODO handle Area of Effect attacks
 				Actor target = world.getTarget();
 
-				// Weapon weapon = attacker.getEquipedWeapon();
-
 				Attack attack = new Attack(attacker, target);
+				
 				attack.resolve();
 			}
 			break;

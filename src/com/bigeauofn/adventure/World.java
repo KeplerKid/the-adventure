@@ -3,7 +3,6 @@ package com.bigeauofn.adventure;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -217,7 +216,7 @@ public class World extends JPanel implements MouseListener {
 	 * @return
 	 */
 	public Actor getTarget() {
-		System.out.println(this.selectedActor.getName() + " was retreived as a target");
+		System.out.println(this.selectedTarget.getName() + " was retreived as a target");
 		return this.selectedTarget;
 	}
 
@@ -226,7 +225,7 @@ public class World extends JPanel implements MouseListener {
 	 * @param a
 	 */
 	private void selectTarget(Actor a) {
-		System.out.println(this.selectedActor.getName() + " was targeted");
+		System.out.println(a.getName() + " was targeted");
 		this.selectedTarget = a;
 	}
 

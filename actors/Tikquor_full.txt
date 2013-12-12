@@ -48,12 +48,13 @@ group=axe
 [ability]
 type=magic
 name=Mega Supper Damage +12
-source=faraway
+source=str
+defense=ac
 range=10
 effects=kill,murder,maim
 requirements=strength,iron,will
 usesproficiencybonus=true
-usesweapon=false
+usesweapon=true
 dice=2d10
 
 [item]
@@ -75,7 +76,8 @@ intimidate=+2
 [ability]
 type=magic
 name=Big Jump +12
-source=faraway
+source=dex
+defense=ac
 range=10
 effects=kill,murder,maim
 requirements=strength,iron,will

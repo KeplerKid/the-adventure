@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.jws.Oneway;
 
 import com.bigeauofn.adventure.dicebag.AttackRoll;
 import com.bigeauofn.adventure.dicebag.DamageRoll;
@@ -19,6 +20,7 @@ public class Actor {
 
 	public static interface ActorHandler {
 		void onActorClicked(Actor actor);
+		void onActorHitPointChange(Actor actor);
 	}
 
 	private ActorHandler mHandler;
@@ -31,13 +33,14 @@ public class Actor {
 	private int[] location;
 
 	private Weapon equipedWeapon;
+	private Ability selectedAbility;
 
 	private HitPoints currentHP;
 	private HashMap<String, String> stats;
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
 	private ArrayList<Ability> abilities;
-	
+
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
 	// bluff, diplomancy, dungeoneering, endurance, heal, history,
 	// insight, intimidate, nature, perception, religion, stealth,
@@ -49,28 +52,36 @@ public class Actor {
 		this.name = name;
 		this.avatar = loadImage(avatarPath);
 		this.location = location;
-		diceSet = DiceFactory.getDiceSet();
+		this.diceSet = DiceFactory.getDiceSet();
 	}
 
 	public Actor(String filePath, ActorHandler handler) {
-		mHandler = handler;
-		actorFilePath = filePath;
+		this.mHandler = handler;
+		this.actorFilePath = filePath;
 		StatFileParser fp = new StatFileParser();
-		stats = fp.parseFile(actorFilePath);
+		this.stats = fp.parseFile(this.actorFilePath);
 
-		name = stats.get("name").toString();
-		avatar = loadImage(stats.get("avatar").toString());
-		location = new int[] { 0, 0 };
+		this.name = stats.get("name").toString();
+		this.avatar = loadImage(stats.get("avatar").toString());
+		this.location = new int[] { 0, 0 };
 
-		currentHP = new HitPoints(getStatInteger("basehp"));
-		currentHP
-				.addtHitPoints(new HitPoints(6 * (getStatInteger("level") - 1)));
-		currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
-		diceSet = DiceFactory.getDiceSet();
+		this.currentHP = new HitPoints(getStatInteger("basehp"));
+		this.currentHP.addtHitPoints(new HitPoints(
+				6 * (getStatInteger("level") - 1)));
+		this.currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
+		this.diceSet = DiceFactory.getDiceSet();
+
+		this.weapons = fp.getWeapons();
+		this.abilities = fp.getAbilities();
+
+		// set random ability
+		int rand = (int) (Math.random() * 100) % this.abilities.size();
+		this.selectedAbility = this.abilities.get(rand);
 		
-		weapons = fp.getWeapons();
-		abilities = fp.getAbilities();
-
+		// set random weapon
+		rand = (int) (Math.random() * 100) % weapons.size();
+		this.equipedWeapon = this.weapons.get(rand);
+		
 	}
 
 	public RollResult rollDice(Integer i) {
@@ -78,38 +89,34 @@ public class Actor {
 	}
 
 	public void equipWeapon(Weapon weapon) {
-		equipedWeapon = weapon;
+		this.equipedWeapon = weapon;
 	}
 
 	public Weapon getEquipedWeapon() {
-//		return equipedWeapon;
-		int rand = (int) (Math.random() * 100) % weapons.size();
-		System.out.println(weapons.get(rand).getName());
-		return weapons.get(rand);
+		return this.equipedWeapon;
 	}
 
 	public void setEquipedWeapon(Weapon equipedWeapon) {
 		this.equipedWeapon = equipedWeapon;
 	}
-	public Ability getAbility(){
-		int rand = (int) (Math.random() * 100) % abilities.size();
-		return abilities.get(rand);
+
+	public Ability getAbility() {
+		return this.selectedAbility;
 	}
-	public RollResult InflictDamage(RollResult d20result){
+
+	public RollResult InflictDamage(RollResult d20result) {
 
 		RollResult damageRolls = null;
-		
-		
-		
-		// TODO currently only handles attacks with weapons, not abilities
-		//if (this.getAbility().isUsesWeapon()) {
-			// TODO make a critical weapon roll
-		//} else {
 
-		//}
-		
+		// TODO currently only handles attacks with weapons, not abilities
+		// if (this.getAbility().isUsesWeapon()) {
+		// TODO make a critical weapon roll
+		// } else {
+
+		// }
+
 		Weapon toUse = this.getEquipedWeapon();
-		
+
 		if (!d20result.isCritical()) {
 
 			damageRolls = toUse.rollWeaponDice();
@@ -121,34 +128,36 @@ public class Actor {
 
 		// add damage modifiers
 		int damage = toUse.getEnhancementLevel();
-		//damage += (this.getStatInteger(this.getAbility().getSource()) - 10) / 2;
+		// damage += (this.getStatInteger(this.getAbility().getSource()) - 10) /
+		// 2;
 		damageRolls.addModifier(damage);
-
-
 
 		System.out.println(damageRolls + " damage dealt");
 		return damageRolls;
 	}
 
 	public int getStatInteger(String stat) {
-		return Integer.parseInt(stats.get(stat).toString());
+		return Integer.parseInt(this.stats.get(stat).toString());
 	}
 
-	public int getAttackModifiers(String attackAttribute) {
+	public RollResult getAttackModifiers(RollResult attackRoll) {
 		int attackBonus = getStatInteger("level") / 2;
-		attackBonus += (getStatInteger(attackAttribute) - 10) / 2;
-		return attackBonus;
+		attackRoll.addModifier(attackBonus);
+		
+		attackRoll = this.selectedAbility.getAbilityAttackBonuses(this, attackRoll);
+		
+		return attackRoll;
 	}
 
 	public int updateStatIntger(String stat, int amountToAdd) {
 		int currentValue = getStatInteger(stat);
 		int newValue = currentValue + amountToAdd;
-		stats.put(stat, newValue + "");
+		this.stats.put(stat, newValue + "");
 		return newValue;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -156,7 +165,7 @@ public class Actor {
 	}
 
 	public BufferedImage getAvatar() {
-		return avatar;
+		return this.avatar;
 	}
 
 	public void setAvatar(BufferedImage avatar) {
@@ -164,7 +173,7 @@ public class Actor {
 	}
 
 	public int[] getLocation() {
-		return location;
+		return this.location;
 	}
 
 	/**
@@ -176,8 +185,8 @@ public class Actor {
 	 */
 	public int[] updatePosition(int[] newLoc) {
 
-		location[0] += newLoc[0];
-		location[1] += newLoc[1];
+		this.location[0] += newLoc[0];
+		this.location[1] += newLoc[1];
 		return this.location;
 
 	}
@@ -195,6 +204,7 @@ public class Actor {
 
 	}
 
+	// TODO decide if this is enough criteria
 	public boolean equals(Object o) {
 		Actor otherChar = (Actor) o;
 		if (this.avatar.equals(otherChar.avatar)) {
@@ -220,11 +230,11 @@ public class Actor {
 	}
 
 	public void select() {
-		mHandler.onActorClicked(this);
+		this.mHandler.onActorClicked(this);
 	}
 
 	public HashMap<String, String> getStats() {
-		return stats;
+		return this.stats;
 	}
 
 	public void setStats(HashMap<String, String> stats) {
@@ -232,11 +242,7 @@ public class Actor {
 	}
 
 	public HitPoints getCurrentHP() {
-		return currentHP;
-	}
-
-	public Weapon getWeapon() {
-		return null;
+		return this.currentHP;
 	}
 
 	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
@@ -245,12 +251,15 @@ public class Actor {
 
 	public void takeDamage(DamageRoll damageDealt) {
 		this.currentHP.subtractHitPoints(damageDealt.getDamage());
-		// updateUI
+
+		// update UI
+		this.mHandler.onActorHitPointChange(this);
+		
 		System.out.println(this.name + ": " + currentHP);
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("------------------------------------------------------\n");
 		sb.append("Actor named - ");
@@ -261,26 +270,27 @@ public class Actor {
 		sb.append("Current Hit Points - ");
 		sb.append(this.currentHP);
 		sb.append("\n");
-		for(String s : this.stats.keySet()){
-			sb.append("\n\tStat - " + s + ", Value - " + this.stats.get(s));
+		sb.append("Stat block:");
+		for (String s : this.stats.keySet()) {
+			sb.append("\n\t" + s + ":\t" + this.stats.get(s));
 		}
-		
-		sb.append("\nWeapons Counts - ");
+
+		sb.append("\nWeapons Count - ");
 		sb.append(this.weapons.size());
-		for(Weapon w : this.weapons){
+		for (Weapon w : this.weapons) {
 			sb.append("\n\t" + w.toString());
 		}
 
 		sb.append("\n\nPlayers Dice count - ");
 		sb.append(this.diceSet.size());
-		for(Integer i : this.diceSet.keySet()){
-			sb.append("\n\t"+this.diceSet.get(i).toString());
+		for (Integer i : this.diceSet.keySet()) {
+			sb.append("\n\t" + this.diceSet.get(i).toString());
 		}
 		sb.append("\n");
 		sb.append("Abilities Count - ");
-		sb.append(this.abilities .size());
-		for(Ability a : this.abilities){
-			sb.append("\n\t"+a.toString());
+		sb.append(this.abilities.size());
+		for (Ability a : this.abilities) {
+			sb.append("\n\t" + a.toString());
 		}
 		sb.append("------------------------------------------------------\n");
 		return sb.toString();
