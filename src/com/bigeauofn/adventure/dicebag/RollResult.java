@@ -24,10 +24,12 @@ public class RollResult implements Comparable<RollResult>,
 	}
 
 	public void addModifier(int modifier) {
+		System.out.println("Adding " + modifier + " to get a new total of " + (this.result + modifier));
 		this.result += modifier;
 	}
 
 	public void addResult(RollResult otherResult) {
+		System.out.println("Adding " + otherResult.result + " to get a new total of " + (this.result + otherResult.result));
 		this.result += otherResult.result;
 	}
 	
@@ -57,6 +59,7 @@ public class RollResult implements Comparable<RollResult>,
 
 	@Override
 	public int getAttackTotal() {
+		System.out.println("Attack Total: " + this.result);
 		return this.result;
 	}
 
