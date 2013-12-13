@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.ListModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import com.bigeauofn.adventure.dicebag.AttackRoll;
 import com.bigeauofn.adventure.dicebag.DamageRoll;
@@ -288,22 +286,27 @@ public class Actor {
 	 * used for creation of JList in the UI
 	 * @return
 	 */
-	public Object[] getWeaponList() {
+	public Vector<Weapon> getWeaponList() {
+		Vector<Weapon> weaponVector = new Vector<Weapon>();
 		for (Weapon w : weapons) {
 			System.out.println(w);
+			weaponVector.add(w);
 		}
-		return weapons.toArray();
+		
+		return weaponVector;
 	}
 
 	/**
 	 * used for creation of JList in the UI
 	 * @return
 	 */	
-	public Object[] getAbilityList() {
+	public Vector<Ability> getAbilityList() {
+		Vector<Ability> abilityVector = new Vector<Ability>();
 		for (Ability a : abilities) {
 			System.out.println(a);
+			abilityVector.add(a);
 		}
-		return abilities.toArray();
+		return abilityVector;
 	}
 
 	public void setSelectedAbility(Ability selectedValue) {
