@@ -1,8 +1,10 @@
-[Base Data]
+[base data]
 name=Tikquor
 race=Dragonborn
 class=Fighter
 avatar=res/avatars/hero.png
+
+[stats]
 level=4
 speed=6
 ac=18
@@ -20,9 +22,9 @@ wis=14
 cha=14
 initiative=3
 
-athletics=trained
-endurance=trained
-intimidate=trained
+athletics=5
+endurance=5
+intimidate=5
 
 [weapon]
 type=weapon
@@ -92,5 +94,12 @@ name=weapon focus
 name=condition
 weapon=axe
 atk=+1
+
+[feat]
+name=Weapon Focus
+prerequisite=stat,str,15
+benefit=1
+event=ondamage
+condition=weapon,axe
 
 [end]

@@ -13,7 +13,8 @@ public class StatFileParser {
 	private HashMap<String, Item> items;
 	private ArrayList<Weapon> weapons;
 	private ArrayList<Ability> abilities;
-	
+	private HashMap<String, Stat> stats;
+
 	public StatFileParser() {
 
 	}
@@ -39,8 +40,11 @@ public class StatFileParser {
 
 	public void selectParser(HashMap<String, String> valueSet) {
 		switch (valueSet.get("Thing")) {
-		case "[Base Data]":
+		case "[base data]":
 			parseBaseData(valueSet);
+			break;
+		case "[stats]":
+			parseStats(valueSet);
 			break;
 		case "[item]":
 			parseItems(valueSet);
@@ -62,6 +66,16 @@ public class StatFileParser {
 		}
 	}
 
+	private void parseStats(HashMap<String, String> valueSet) {
+		for (String s : valueSet.keySet()) {
+			if (!s.equals("Thing")) {
+				Stat toPut = new Stat(s, Integer.parseInt(valueSet.get(s)),
+						"stat");
+				this.getStats().put(s, toPut);
+			}
+		}
+	}
+
 	private void parseBaseData(HashMap<String, String> baseData) {
 		this.baseData = baseData;
 	}
@@ -70,27 +84,23 @@ public class StatFileParser {
 		if (this.items == null) {
 			this.items = new HashMap<String, Item>();
 		}
-		
+
 		Item toPut = new Item(newItem.get("name"));
 		this.items.put(toPut.getName(), toPut);
-		
+
 		for (String s : newItem.keySet()) {
-			if (!s.equals("name") 
-					&& !s.equals("type") 
-					&& !s.equals("dice")
+			if (!s.equals("name") && !s.equals("type") && !s.equals("dice")
 					&& !s.equals("Thing")) {
-				
-				
-				
+
 				toPut.addAttribute(s, Integer.parseInt(newItem.get(s)), "Item");
-				
+
 			} else if (s.equals("dice")) {
-				
+
 				String dice = newItem.get(s);
 				int splitter = dice.indexOf("d");
 				String value = dice.substring(splitter + 1, dice.length());
 				toPut.addDice(Integer.parseInt(value));
-				
+
 			}
 		}
 	}
@@ -112,17 +122,17 @@ public class StatFileParser {
 					items = new HashMap<String, String>();
 					// only one "Thing" in each map, each item is a "Thing"
 					items.put("Thing", line);
-					
+
 				} else {
 					if (!line.startsWith(";") && line.contains("=")) {
-						
+
 						// add a new KV pair
 						int splitter = line.indexOf("=");
 						String key = line.substring(0, splitter);
 						String value = line.substring(splitter + 1,
 								line.length());
 						items.put(key, value);
-						
+
 					} else {
 						// do nothing, ; indicates comment
 					}
@@ -136,18 +146,17 @@ public class StatFileParser {
 		return this.baseData;
 	}
 
-
-
 	private void parseWeapon(HashMap<String, String> weapon) {
-		
+
 		Weapon toPut = new Weapon(weapon);
 		this.getWeapons().add(toPut);
-		
+
 	}
+
 	private void parseAbility(HashMap<String, String> ability) {
 		Ability toPut = new Ability(ability);
 		this.getAbilities().add(toPut);
-		
+
 	}
 
 	public HashMap<String, Item> getItems() {
@@ -164,14 +173,19 @@ public class StatFileParser {
 		}
 		return weapons;
 	}
-	
-	public ArrayList<Ability> getAbilities(){
-		if(this.abilities == null){
+
+	public ArrayList<Ability> getAbilities() {
+		if (this.abilities == null) {
 			this.abilities = new ArrayList<Ability>();
 		}
 		return this.abilities;
 	}
 
-
+	public HashMap<String, Stat> getStats() {
+		if (this.stats == null) {
+			this.stats = new HashMap<String, Stat>();
+		}
+		return stats;
+	}
 
 }

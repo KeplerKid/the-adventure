@@ -1,8 +1,10 @@
-[Base Data]
+[base data]
 name=Gobby
 race=Goblin
 class=Brute
 avatar=res/avatars/bad_guy.png
+
+[stats]
 level=3
 speed=5
 ac=16

@@ -36,11 +36,13 @@ public class Actor {
 	private Ability selectedAbility;
 
 	private HitPoints currentHP;
-	private HashMap<String, String> stats;
+	private HashMap<String, String> baseData;
+	private HashMap<String, Stat> stats;
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
 	private ArrayList<Ability> abilities;
-
+	private FeatCollection feats;
+	
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
 	// bluff, diplomancy, dungeoneering, endurance, heal, history,
 	// insight, intimidate, nature, perception, religion, stealth,
@@ -56,13 +58,21 @@ public class Actor {
 	}
 
 	public Actor(String filePath, ActorHandler handler) {
+		
 		this.mHandler = handler;
 		this.actorFilePath = filePath;
+		
 		StatFileParser fp = new StatFileParser();
-		this.stats = fp.parseFile(this.actorFilePath);
-
-		this.name = stats.get("name").toString();
-		this.avatar = loadImage(stats.get("avatar").toString());
+		
+		this.baseData = fp.parseFile(this.actorFilePath);
+		this.stats = fp.getStats();
+		this.weapons = fp.getWeapons();
+		this.abilities = fp.getAbilities();
+		this.feats = new FeatCollection();
+		
+		
+		this.name = baseData.get("name").toString();
+		this.avatar = loadImage(baseData.get("avatar").toString());
 		this.location = new int[] { 0, 0 };
 
 		this.currentHP = new HitPoints(getStatInteger("basehp"));
@@ -71,9 +81,20 @@ public class Actor {
 		this.currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
 		this.diceSet = DiceFactory.getDiceSet();
 
-		this.weapons = fp.getWeapons();
-		this.abilities = fp.getAbilities();
+		this.testFeats();
+	}
 
+	private void testFeats() {
+		System.out.println("feat 1");
+		Feat f1 = new Feat("stat", "speed", 6 + "");
+		if (f1.meetsRequirements(this))
+			feats.addFeat(f1);
+		
+		System.out.println("feat 2");
+		Feat f2 = new Feat("stat", "speed", 7 + "");
+		if (f2.meetsRequirements(this))
+			feats.addFeat(f2);
+		
 	}
 
 	public RollResult rollDice(Integer i) {
@@ -122,7 +143,7 @@ public class Actor {
 	}
 
 	public int getStatInteger(String stat) {
-		return Integer.parseInt(this.stats.get(stat).toString());
+		return this.stats.get(stat).getValue();
 	}
 
 	public RollResult getAttackModifiers(RollResult attackRoll) {
@@ -137,7 +158,7 @@ public class Actor {
 	public int updateStatIntger(String stat, int amountToAdd) {
 		int currentValue = getStatInteger(stat);
 		int newValue = currentValue + amountToAdd;
-		this.stats.put(stat, newValue + "");
+		this.baseData.put(stat, newValue + "");
 		return newValue;
 	}
 
@@ -180,7 +201,6 @@ public class Actor {
 
 		BufferedImage im = null;
 		try {
-			System.out.println(path);
 			im = ImageIO.read(new File(path));
 		} catch (IOException e) {
 			System.out.println("Error: Could not load image from: " + path);
@@ -219,11 +239,11 @@ public class Actor {
 	}
 
 	public HashMap<String, String> getStats() {
-		return this.stats;
+		return this.baseData;
 	}
 
 	public void setStats(HashMap<String, String> stats) {
-		this.stats = stats;
+		this.baseData = stats;
 	}
 
 	public HitPoints getCurrentHP() {
@@ -256,8 +276,8 @@ public class Actor {
 		sb.append(this.currentHP);
 		sb.append("\n");
 		sb.append("Stat block:");
-		for (String s : this.stats.keySet()) {
-			sb.append("\n\t" + s + ":\t" + this.stats.get(s));
+		for (String s : this.baseData.keySet()) {
+			sb.append("\n\t" + s + ":\t" + this.baseData.get(s));
 		}
 
 		sb.append("\nWeapons Count - ");
@@ -289,7 +309,6 @@ public class Actor {
 	public Vector<Weapon> getWeaponList() {
 		Vector<Weapon> weaponVector = new Vector<Weapon>();
 		for (Weapon w : weapons) {
-			System.out.println(w);
 			weaponVector.add(w);
 		}
 		
@@ -303,7 +322,6 @@ public class Actor {
 	public Vector<Ability> getAbilityList() {
 		Vector<Ability> abilityVector = new Vector<Ability>();
 		for (Ability a : abilities) {
-			System.out.println(a);
 			abilityVector.add(a);
 		}
 		return abilityVector;
@@ -317,4 +335,13 @@ public class Actor {
 		return selectedAbility;
 	}
 
+	public D20C getCompareObject(String type, String key) {
+		switch(type) {
+			case "stat":
+				return this.stats.get(key);
+			default:
+				break;
+		}
+		return this.stats.get(key);
+	}
 }
