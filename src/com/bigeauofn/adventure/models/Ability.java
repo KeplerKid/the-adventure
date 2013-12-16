@@ -13,6 +13,7 @@ public class Ability {
 	private String source;
 	private String defense;
 	private int range;
+	private KeywordCollection keywords;
 	private ArrayList<String> effects;
 	private ArrayList<String> requirements;
 	private boolean usesProficiencyBonus;

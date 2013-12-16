@@ -30,7 +30,7 @@ public class Item {
 		this.dice.add(toAdd);
 	}
 
-	public RollResult RollDice() {
+	public RollResult rollDice() {
 		RollResult toReturn = null;
 		for (Dice d : this.dice) {
 			if (toReturn == null) {
