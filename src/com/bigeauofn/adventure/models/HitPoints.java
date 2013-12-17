@@ -1,4 +1,4 @@
-package com.bigeauofn.adventure.dicebag;
+package com.bigeauofn.adventure.models;
 
 public class HitPoints {
 	private int numberOfHitPoints;

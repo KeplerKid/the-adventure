@@ -13,7 +13,6 @@ import com.bigeauofn.adventure.dicebag.AttackRoll;
 import com.bigeauofn.adventure.dicebag.DamageRoll;
 import com.bigeauofn.adventure.dicebag.Dice;
 import com.bigeauofn.adventure.dicebag.DiceFactory;
-import com.bigeauofn.adventure.dicebag.HitPoints;
 import com.bigeauofn.adventure.dicebag.RollResult;
 
 public class Actor {
@@ -117,7 +116,7 @@ public class Actor {
 		return this.selectedAbility;
 	}
 
-	public RollResult InflictDamage(RollResult d20result) {
+	public RollResult inflictDamage(RollResult d20result) {
 
 		RollResult damageRolls = null;
 
@@ -125,7 +124,8 @@ public class Actor {
 
 		if (!d20result.isCritical()) {
 
-			damageRolls = toUse.rollWeaponDice();
+//			damageRolls = toUse.rollWeaponDice(this.selectedAbility);
+			damageRolls = this.selectedAbility.hit(this);
 
 		} else {
 			// max damage
@@ -134,9 +134,10 @@ public class Actor {
 
 		// add damage modifiers
 		int damage = toUse.getEnhancementLevel();
-		// damage += (this.getStatInteger(this.getAbility().getSource()) - 10) /
-		// 2;
+		
 		damageRolls.addModifier(damage);
+		
+		// TODO onDamage()
 
 		System.out.println(damageRolls + " damage dealt");
 		return damageRolls;
@@ -148,9 +149,12 @@ public class Actor {
 
 	public RollResult getAttackModifiers(RollResult attackRoll) {
 		int attackBonus = getStatInteger("level") / 2;
+		
 		attackRoll.addModifier(attackBonus);
 		
 		attackRoll = this.selectedAbility.getAbilityAttackBonuses(this, attackRoll);
+		
+		// TODO onAttack()
 		
 		return attackRoll;
 	}
@@ -191,6 +195,7 @@ public class Actor {
 	 */
 	public int[] updatePosition(int[] newLoc) {
 
+		// TODO onMove()?
 		this.location[0] += newLoc[0];
 		this.location[1] += newLoc[1];
 		return this.location;
@@ -251,6 +256,8 @@ public class Actor {
 	}
 
 	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
+		
+		// TODO onDefense()
 		return attackRoll.getAttackTotal() >= this.getStatInteger(defense);
 	}
 
@@ -260,6 +267,7 @@ public class Actor {
 		// update UI
 		this.mHandler.onActorHitPointChange(this);
 		
+		// TODO onTakeDamage();
 		System.out.println(this.name + ": " + currentHP);
 	}
 

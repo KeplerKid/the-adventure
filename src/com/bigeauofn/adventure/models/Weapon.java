@@ -3,7 +3,6 @@ package com.bigeauofn.adventure.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.bigeauofn.adventure.dicebag.DamageRoll;
 import com.bigeauofn.adventure.dicebag.Dice;
 import com.bigeauofn.adventure.dicebag.DiceFactory;
 import com.bigeauofn.adventure.dicebag.RollResult;
@@ -13,7 +12,6 @@ public class Weapon {
 	private String name;
 	private int handsToWield;
 	private int reach;
-
 
 	// TODO actually make it use dice
 	private ArrayList<Dice> dice;
@@ -29,7 +27,7 @@ public class Weapon {
 		this.name = name;
 		this.handsToWield = handsToWield;
 		this.reach = reach;
-		this.dice = DiceFactory.getDice(numDice+"d"+ numSides);
+		this.dice = DiceFactory.getDice(numDice + "d" + numSides);
 		this.proficiencyBonus = proficiencyBonus;
 		this.enhancementLevel = enhancementLevel;
 	}
@@ -46,8 +44,6 @@ public class Weapon {
 		this.group = weapon.get("group");
 	}
 
-
-
 	public String getGroup() {
 		return group;
 	}
@@ -55,7 +51,6 @@ public class Weapon {
 	public String getName() {
 		return name;
 	}
-
 
 	public int getHandsToWield() {
 		return handsToWield;
@@ -65,7 +60,6 @@ public class Weapon {
 		return reach;
 	}
 
-
 	public int getProficiencyBonus() {
 		return proficiencyBonus;
 	}
@@ -74,14 +68,16 @@ public class Weapon {
 		return enhancementLevel;
 	}
 
-	public RollResult rollWeaponDice() {
+	public RollResult rollWeaponDice(Ability a) {
 		RollResult toReturn = null;
 
-		for (Dice d : this.dice) {
-			if (toReturn == null) {
-				toReturn = d.rollDice();
-			} else {
-				toReturn.addResult(d.rollDice());
+		for (int i = 0; i < a.getWeaponDiceMultiplier(); i++) {
+			for (Dice d : this.dice) {
+				if (toReturn == null) {
+					toReturn = d.rollDice();
+				} else {
+					toReturn.addResult(d.rollDice());
+				}
 			}
 		}
 		return toReturn;
@@ -100,28 +96,21 @@ public class Weapon {
 		}
 		return toReturn;
 	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
-//		sb.append("Weapon Named ");
+		// sb.append("Weapon Named ");
 		sb.append(this.name);
-	/*
-		sb.append(" Hands to Wield - ");
-		sb.append(this.handsToWield);
-		sb.append(" Reach - ");
-		sb.append(this.reach); 
-		sb.append(" Dice Count - ");
-		sb.append(this.dice.size()); 
-		for(Dice d : this.dice){
-			sb.append(" " + d.toString());
-		}
-		sb.append(" Proficiency Bonus - ");
-		sb.append(this.proficiencyBonus);  
-		sb.append(" Enhancement Level - ");
-		sb.append(this.enhancementLevel); 
-		sb.append(" Group - ");
-		sb.append(this.group); 
-		*/
+		/*
+		 * sb.append(" Hands to Wield - "); sb.append(this.handsToWield);
+		 * sb.append(" Reach - "); sb.append(this.reach);
+		 * sb.append(" Dice Count - "); sb.append(this.dice.size()); for(Dice d
+		 * : this.dice){ sb.append(" " + d.toString()); }
+		 * sb.append(" Proficiency Bonus - "); sb.append(this.proficiencyBonus);
+		 * sb.append(" Enhancement Level - "); sb.append(this.enhancementLevel);
+		 * sb.append(" Group - "); sb.append(this.group);
+		 */
 		return sb.toString();
 	}
 

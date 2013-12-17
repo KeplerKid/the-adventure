@@ -60,17 +60,18 @@ effects=kill,murder,maim
 requirements=strength,iron,will
 usesproficiencybonus=true
 usesweapon=true
-dice=2d10
+dice=2w
 
-;[ability]
-;type=magic
-;name=Cloak of Invisibility +200
-;source=dex
-;range=10
-;effects=addstealth,addinitiative
-;requirements=cloak,leather,shoes
-;usesproficiencybonus=false
-;usesweapon=false
-;dice=3d4
+[ability]
+type=magic
+name=Cloak of Invisibility +200
+source=dex
+defense=ref
+range=10
+effects=addstealth,addinitiative
+requirements=cloak,leather,shoes
+usesproficiencybonus=false
+usesweapon=false
+dice=4d4
 
 [end]

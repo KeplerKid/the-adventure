@@ -18,37 +18,33 @@ public class Ability {
 	private ArrayList<String> requirements;
 	private boolean usesProficiencyBonus;
 	private boolean usesWeapon;
-	private ArrayList<Dice> dice;
-
-	public Ability(String source, String defense, int range,
-			ArrayList<String> effects, ArrayList<String> requirements,
-			boolean usesProficiencyBonus, boolean usesWeapon,
-			ArrayList<Dice> dice) {
-
-		this.source = source;
-		this.defense = defense;
-		this.range = range;
-		this.effects = effects;
-		this.requirements = requirements;
-		this.usesProficiencyBonus = usesProficiencyBonus;
-		this.usesWeapon = usesWeapon;
-		this.dice = dice;
-	}
-
+	private String diceString;
+	private ArrayList<Stat> bonusDamage; // TODO
+	
 	public Ability(HashMap<String, String> ability) {
 		this.type = ability.get("type");
 		this.name = ability.get("name");
 		this.source = ability.get("source");
 		this.defense = ability.get("defense");
 		this.range = Integer.parseInt(ability.get("range"));
+		this.usesWeapon = Boolean.parseBoolean(ability.get("usesweapon"));
+		this.diceString = ability.get("dice");
+//		this.bonusDamage = new ArrayList<Stat>();
+//		for (String s : Arrays.asList(ability.get("bonusdamage")) {
+//			bonusDamage.add(new Stat(s));
+//		}
 		this.effects = new ArrayList<String>(Arrays.asList(ability.get(
 				"effects").split(",")));
+
 		this.requirements = new ArrayList<String>(Arrays.asList(ability.get(
 				"requirements").split(",")));
+
+		this.keywords = new KeywordCollection();
+		this.keywords.addKeywords(Arrays.asList(ability.get("keywords")));
+
 		this.usesProficiencyBonus = Boolean.parseBoolean(ability
 				.get("usesproficiencybonus"));
-		this.usesWeapon = Boolean.parseBoolean("usesweapon");
-		this.dice = DiceFactory.getDice(ability.get("dice"));
+		
 	}
 
 	/**
@@ -69,14 +65,16 @@ public class Ability {
 
 		sumBonuses += (attacker.getStatInteger(source) - 10) / 2;
 		System.out.println("Bonus from " + source + ": " + sumBonuses);
-		
+
 		if (this.usesProficiencyBonus) {
-			System.out.println("adding proficiency bonus of " + w.getProficiencyBonus());
+			System.out.println("adding proficiency bonus of "
+					+ w.getProficiencyBonus());
 			sumBonuses += w.getProficiencyBonus();
 		}
 
 		if (this.usesWeapon) {
-			System.out.println("adding ehancement bonus of " + w.getEnhancementLevel());
+			System.out.println("adding ehancement bonus of "
+					+ w.getEnhancementLevel());
 			sumBonuses += w.getEnhancementLevel();
 		}
 
@@ -85,12 +83,59 @@ public class Ability {
 		return attackRoll;
 	}
 
+	/** TODO
+	 * All effects that occur when an ability hits are taken care of here (eventaully).
+	 */
+	public RollResult hit(Actor attacker) {
+		
+		// damage roll
+		RollResult damageRoll = dealDamage(attacker.getEquipedWeapon());
+		
+		// additional damage
+		
+		return damageRoll;
+	}
+	
+	private RollResult dealDamage(Weapon equipedWeapon) {
+		RollResult toReturn = null;
+		if (this.usesWeapon) {
+			toReturn = equipedWeapon.rollWeaponDice(this);
+		} else {
+			toReturn = rollDamageDice();
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Rolls the damage dice for the ability, ex. will roll 2d4 for Magic Missle
+	 * @return
+	 */
+	private RollResult rollDamageDice() {
+		ArrayList<Dice> damageDice = DiceFactory.getDice(this.diceString);
+		RollResult toReturn = new RollResult(0);
+		
+		for (Dice d : damageDice) {
+			toReturn.addResult(d.rollDice());
+		}
+		
+		return toReturn;
+	}
+
+	/** TODO
+	 * All effects/events that occur when an ability misses are taken care of here (eventually).
+	 */
+	public void miss(Actor attacker, Actor defender) {
+		
+	}
+	
 	// TODO need to iterate through appropriate effects
-	// not all abilities add the Source as 
-	public RollResult addAbilityBonusDamage(Actor attacker, RollResult dm) {
+	// not all abilities add the Source as extra damage (ex: Fighter's Sure
+	// Strike pg. 77)
+	private RollResult addAbilityBonusDamage(Actor attacker, RollResult dm) {
 		dm.addModifier((attacker.getStatInteger(source) - 10) / 2);
 		return dm;
 	}
+
 	public boolean isUsesWeapon() {
 		return usesWeapon;
 	}
@@ -142,33 +187,36 @@ public class Ability {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-//		sb.append("Ability Named -");
+		// sb.append("Ability Named -");
 		sb.append(this.name);
 		/*
-		sb.append("\n Type - ");
-		sb.append(this.type);
-		sb.append("\n Source - ");
-		sb.append(this.source);
-		sb.append("\n range -");
-		sb.append(this.range);
-		for (String s : this.effects) {
-			sb.append("\n\tEffect - " + s);
-		}
-		for (String s : this.requirements) {
-			sb.append("\n\t requirement - " + s);
-		}
-		sb.append("\nUses Profeciency Bonus - ");
-		sb.append(this.usesProficiencyBonus);
-		sb.append("\nUses Weapon - ");
-		sb.append(this.usesWeapon);
-		sb.append("Dice Count - ");
-		sb.append(this.dice.size());
-		sb.append("\n");
-		for (Dice d : this.dice) {
-			sb.append("\t" + d.toString());
-		}
-		*/
+		 * sb.append("\n Type - "); sb.append(this.type);
+		 * sb.append("\n Source - "); sb.append(this.source);
+		 * sb.append("\n range -"); sb.append(this.range); for (String s :
+		 * this.effects) { sb.append("\n\tEffect - " + s); } for (String s :
+		 * this.requirements) { sb.append("\n\t requirement - " + s); }
+		 * sb.append("\nUses Profeciency Bonus - ");
+		 * sb.append(this.usesProficiencyBonus); sb.append("\nUses Weapon - ");
+		 * sb.append(this.usesWeapon); sb.append("Dice Count - ");
+		 * sb.append(this.dice.size()); sb.append("\n"); for (Dice d :
+		 * this.dice) { sb.append("\t" + d.toString()); }
+		 */
 		return sb.toString();
+	}
+
+	/**
+	 * This handles the abilities that do X[W] damage like Brute Strike (page 77). 
+	 * @return
+	 */
+	public int getWeaponDiceMultiplier() {
+		int multiplier = 1;
+		
+		if (this.usesWeapon) {
+			int splitter = this.diceString.indexOf("w");
+			multiplier = Integer.parseInt(diceString.substring(0, splitter));
+		}
+		
+		return multiplier;
 	}
 
 }

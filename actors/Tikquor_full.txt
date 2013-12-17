@@ -48,16 +48,18 @@ proficiencyBonus=2
 group=axe
 
 [ability]
-type=magic
-name=Mega Supper Damage +12
+name=Brute Strike
+type=daily
 source=str
 defense=ac
-range=10
+range=1
+keywords=martial,weapon,reliable
 effects=kill,murder,maim
-requirements=strength,iron,will
+requirements=nyi
 usesproficiencybonus=true
 usesweapon=true
-dice=2d10
+dice=3w
+bonusdamage=strmod
 
 [item]
 type=armor
@@ -86,6 +88,7 @@ requirements=strength,iron,will
 usesproficiencybonus=true
 usesweapon=false
 dice=2d10
+bonusdamage=dexmod
 
 [feat]
 name=weapon focus

@@ -1,6 +1,5 @@
 package com.bigeauofn.adventure.models;
 
-import com.bigeauofn.adventure.World;
 import com.bigeauofn.adventure.dicebag.RollResult;
 
 public class Attack {
@@ -32,7 +31,7 @@ public class Attack {
 			System.out.println("A Hit was Scored\n");
 
 			//RollResult damageDealt = calculateDamage(d20result);
-			defender.takeDamage(attacker.InflictDamage(d20result));
+			defender.takeDamage(attacker.inflictDamage(d20result));
 
 		} else {
 
@@ -52,19 +51,19 @@ public class Attack {
 	 *            mainly to get the other characters, and environment
 	 * @return a list of eligible targets for the attack
 	 */
-	public static int[] getPossibleTargets(Actor attacker, World world) {
-
-		int[] actorLoc = attacker.getLocation();
-		int range = 0;
-		//if (ability.isUsesWeapon()) {
-			//range = weapon.getReach();
-		//}
-
-		int numSquares = (int) Math.pow(range, 3);
-		int[] targetSquares = new int[numSquares];
-		for (int i = 0; i < numSquares; i++) {
-			// targetSquares
-		}
-		return null;
-	}
+//	public static int[] getPossibleTargets(Actor attacker, World world) {
+//
+//		int[] actorLoc = attacker.getLocation();
+//		int range = 0;
+//		//if (ability.isUsesWeapon()) {
+//			//range = weapon.getReach();
+//		//}
+//
+//		int numSquares = (int) Math.pow(range, 3);
+//		int[] targetSquares = new int[numSquares];
+//		for (int i = 0; i < numSquares; i++) {
+//			// targetSquares
+//		}
+//		return null;
+//	}
 }

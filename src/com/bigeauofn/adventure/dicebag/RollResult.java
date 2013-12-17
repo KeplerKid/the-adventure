@@ -2,6 +2,8 @@ package com.bigeauofn.adventure.dicebag;
 
 import java.util.Comparator;
 
+import com.bigeauofn.adventure.models.HitPoints;
+
 public class RollResult implements Comparable<RollResult>,
 		Comparator<RollResult>, DamageRoll, AttackRoll {
 	
