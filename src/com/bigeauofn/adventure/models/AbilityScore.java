@@ -46,7 +46,7 @@ public class AbilityScore implements D20C {
 	
 	@Override
 	public String toString(){
-		return this.name + " Value = " + this.value + " Current Bonus = " + this.bonus + "\n";
+		return "Ability Named - " + this.name + " Has Value = " + this.value + " Current Bonus = " + this.bonus + "\n";
 	}
 
 

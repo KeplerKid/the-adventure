@@ -13,7 +13,8 @@ public class StatFileParser {
 	private HashMap<String, Item> items;
 	private ArrayList<Weapon> weapons;
 	private ArrayList<Power> abilities;
-	private HashMap<String, AbilityScore> stats;
+	private HashMap<String, AbilityScore> abilityScores;
+	private HashMap<String, AbilityScore> notDoneYet;
 
 	public StatFileParser() {
 
@@ -43,8 +44,8 @@ public class StatFileParser {
 		case "[base data]":
 			parseBaseData(valueSet);
 			break;
-		case "[stats]":
-			parseStats(valueSet);
+		case "[abilities]":
+			parseAbilities(valueSet);
 			break;
 		case "[item]":
 			parseItems(valueSet);
@@ -55,7 +56,8 @@ public class StatFileParser {
 		case "[ability]":
 			parseAbility(valueSet);
 			break;
-		case "[effect]":
+		case "[stats]":
+			parseNotDoneYet(valueSet);
 			break;
 		case "[feat]":
 			break;
@@ -66,12 +68,23 @@ public class StatFileParser {
 		}
 	}
 
-	private void parseStats(HashMap<String, String> valueSet) {
+	private void parseNotDoneYet(HashMap<String, String> valueSet) {
 		for (String s : valueSet.keySet()) {
 			if (!s.equals("Thing")) {
 				AbilityScore toPut = new AbilityScore(s, Integer.parseInt(valueSet.get(s)),
 						"stat");
-				this.getStats().put(s, toPut);
+				this.getNotDoneYet().put(s, toPut);
+			}
+		}
+		
+	}
+
+	private void parseAbilities(HashMap<String, String> valueSet) {
+		for (String s : valueSet.keySet()) {
+			if (!s.equals("Thing")) {
+				AbilityScore toPut = new AbilityScore(s, Integer.parseInt(valueSet.get(s)),
+						"stat");
+				this.getAbilityScores().put(s, toPut);
 			}
 		}
 	}
@@ -181,11 +194,17 @@ public class StatFileParser {
 		return this.abilities;
 	}
 
-	public HashMap<String, AbilityScore> getStats() {
-		if (this.stats == null) {
-			this.stats = new HashMap<String, AbilityScore>();
+	public HashMap<String, AbilityScore> getAbilityScores() {
+		if (this.abilityScores == null) {
+			this.abilityScores = new HashMap<String, AbilityScore>();
 		}
-		return stats;
+		return abilityScores;
+	}
+	public HashMap<String,AbilityScore> getNotDoneYet(){
+		if(this.notDoneYet == null){
+			this.notDoneYet = new HashMap<String,AbilityScore>();
+		}
+		return this.notDoneYet;
 	}
 
 }

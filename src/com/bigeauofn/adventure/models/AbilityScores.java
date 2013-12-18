@@ -13,4 +13,14 @@ public class AbilityScores {
 	public AbilityScore getAbilityScore(String abilityName) {
 		return abilityList.get(abilityName);
 	}
+	
+	@Override
+	public String toString(){
+		StringBuilder toReturn = new StringBuilder();
+		for(String s : this.abilityList.keySet()){
+			toReturn.append(this.abilityList.get(s).toString());
+		}
+		
+		return toReturn.toString();
+	}
 }
