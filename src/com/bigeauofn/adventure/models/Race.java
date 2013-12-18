@@ -1,7 +1,5 @@
 package com.bigeauofn.adventure.models;
 
-public class Benefit {
-
-	
+public class Race {
 
 }

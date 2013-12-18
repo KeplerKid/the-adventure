@@ -12,8 +12,8 @@ public class StatFileParser {
 	private HashMap<String, String> baseData;
 	private HashMap<String, Item> items;
 	private ArrayList<Weapon> weapons;
-	private ArrayList<Ability> abilities;
-	private HashMap<String, Stat> stats;
+	private ArrayList<Power> abilities;
+	private HashMap<String, AbilityScore> stats;
 
 	public StatFileParser() {
 
@@ -69,7 +69,7 @@ public class StatFileParser {
 	private void parseStats(HashMap<String, String> valueSet) {
 		for (String s : valueSet.keySet()) {
 			if (!s.equals("Thing")) {
-				Stat toPut = new Stat(s, Integer.parseInt(valueSet.get(s)),
+				AbilityScore toPut = new AbilityScore(s, Integer.parseInt(valueSet.get(s)),
 						"stat");
 				this.getStats().put(s, toPut);
 			}
@@ -154,7 +154,7 @@ public class StatFileParser {
 	}
 
 	private void parseAbility(HashMap<String, String> ability) {
-		Ability toPut = new Ability(ability);
+		Power toPut = new Power(ability);
 		this.getAbilities().add(toPut);
 
 	}
@@ -174,16 +174,16 @@ public class StatFileParser {
 		return weapons;
 	}
 
-	public ArrayList<Ability> getAbilities() {
+	public ArrayList<Power> getAbilities() {
 		if (this.abilities == null) {
-			this.abilities = new ArrayList<Ability>();
+			this.abilities = new ArrayList<Power>();
 		}
 		return this.abilities;
 	}
 
-	public HashMap<String, Stat> getStats() {
+	public HashMap<String, AbilityScore> getStats() {
 		if (this.stats == null) {
-			this.stats = new HashMap<String, Stat>();
+			this.stats = new HashMap<String, AbilityScore>();
 		}
 		return stats;
 	}

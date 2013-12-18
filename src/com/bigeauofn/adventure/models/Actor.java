@@ -32,14 +32,15 @@ public class Actor {
 	private int[] location;
 
 	private Weapon equipedWeapon;
-	private Ability selectedAbility;
+	private Power selectedAbility;
 
 	private HitPoints currentHP;
 	private HashMap<String, String> baseData;
-	private HashMap<String, Stat> stats;
+	private AbilityScores statBlock;
+	
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
-	private ArrayList<Ability> abilities;
+	private ArrayList<Power> abilities;
 	private FeatCollection feats;
 	
 	// private int STR, CON, DEX, INT, WIS, CHA, acrobatics, arcana, athletics,
@@ -64,7 +65,7 @@ public class Actor {
 		StatFileParser fp = new StatFileParser();
 		
 		this.baseData = fp.parseFile(this.actorFilePath);
-		this.stats = fp.getStats();
+		this.statBlock = new AbilityScores(fp.getStats());
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 		this.feats = new FeatCollection();
@@ -74,10 +75,10 @@ public class Actor {
 		this.avatar = loadImage(baseData.get("avatar").toString());
 		this.location = new int[] { 0, 0 };
 
-		this.currentHP = new HitPoints(getStatInteger("basehp"));
+		this.currentHP = new HitPoints(getAbilityScore("basehp").getValue());
 		this.currentHP.addtHitPoints(new HitPoints(
-				6 * (getStatInteger("level") - 1)));
-		this.currentHP.addtHitPoints(new HitPoints(getStatInteger("con")));
+				6 * (getAbilityScore("level").getValue() - 1)));
+		this.currentHP.addtHitPoints(new HitPoints(getAbilityScore("con").getValue()));
 		this.diceSet = DiceFactory.getDiceSet();
 
 		this.testFeats();
@@ -93,7 +94,6 @@ public class Actor {
 		Feat f2 = new Feat("stat", "speed", 7 + "");
 		if (f2.meetsRequirements(this))
 			feats.addFeat(f2);
-		
 	}
 
 	public RollResult rollDice(Integer i) {
@@ -112,7 +112,7 @@ public class Actor {
 		this.equipedWeapon = equipedWeapon;
 	}
 
-	public Ability getAbility() {
+	public Power getAbility() {
 		return this.selectedAbility;
 	}
 
@@ -124,7 +124,6 @@ public class Actor {
 
 		if (!d20result.isCritical()) {
 
-//			damageRolls = toUse.rollWeaponDice(this.selectedAbility);
 			damageRolls = this.selectedAbility.hit(this);
 
 		} else {
@@ -143,12 +142,12 @@ public class Actor {
 		return damageRolls;
 	}
 
-	public int getStatInteger(String stat) {
-		return this.stats.get(stat).getValue();
+	public AbilityScore getAbilityScore(String abilityName) {
+		return this.statBlock.getAbilityScore(abilityName);
 	}
 
 	public RollResult getAttackModifiers(RollResult attackRoll) {
-		int attackBonus = getStatInteger("level") / 2;
+		int attackBonus = getAbilityScore("level").getValue() / 2;
 		
 		attackRoll.addModifier(attackBonus);
 		
@@ -160,7 +159,7 @@ public class Actor {
 	}
 
 	public int updateStatIntger(String stat, int amountToAdd) {
-		int currentValue = getStatInteger(stat);
+		int currentValue = getAbilityScore(stat).getValue();
 		int newValue = currentValue + amountToAdd;
 		this.baseData.put(stat, newValue + "");
 		return newValue;
@@ -258,7 +257,7 @@ public class Actor {
 	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
 		
 		// TODO onDefense()
-		return attackRoll.getAttackTotal() >= this.getStatInteger(defense);
+		return attackRoll.getAttackTotal() >= this.getAbilityScore(defense).getValue();
 	}
 
 	public void takeDamage(DamageRoll damageDealt) {
@@ -302,7 +301,7 @@ public class Actor {
 		sb.append("\n");
 		sb.append("Abilities Count - ");
 		sb.append(this.abilities.size());
-		for (Ability a : this.abilities) {
+		for (Power a : this.abilities) {
 			sb.append("\n\t" + a.toString());
 		}
 		sb.append("------------------------------------------------------\n");
@@ -327,29 +326,31 @@ public class Actor {
 	 * used for creation of JList in the UI
 	 * @return
 	 */	
-	public Vector<Ability> getAbilityList() {
-		Vector<Ability> abilityVector = new Vector<Ability>();
-		for (Ability a : abilities) {
-			abilityVector.add(a);
-		}
-		return abilityVector;
+	public Vector<Power> getAbilityList() {
+		return new Vector<Power>(abilities);
 	}
 
-	public void setSelectedAbility(Ability selectedValue) {
+	public void setSelectedAbility(Power selectedValue) {
 		this.selectedAbility = selectedValue;
 	}
 
-	public Ability getSelectedAbility() {
+	public Power getSelectedAbility() {
 		return selectedAbility;
 	}
 
 	public D20C getCompareObject(String type, String key) {
 		switch(type) {
 			case "stat":
-				return this.stats.get(key);
+				return this.statBlock.getAbilityScore(key);
+			case "skill":
+				// TODO
+				return null;
+			case "defense":
+				// TODO
+				return null;
 			default:
 				break;
 		}
-		return this.stats.get(key);
+		return this.statBlock.getAbilityScore(key);
 	}
 }

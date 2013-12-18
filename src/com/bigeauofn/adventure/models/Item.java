@@ -7,12 +7,12 @@ import com.bigeauofn.adventure.dicebag.*;
 
 public class Item {
 	private String name;
-	private HashMap<String, Stat> attributes;
+	private HashMap<String, AbilityScore> attributes;
 	private ArrayList<Dice> dice;
 
 	public Item(String name) {
 		this.name = name;
-		this.attributes = new HashMap<String, Stat>();
+		this.attributes = new HashMap<String, AbilityScore>();
 		this.dice = new ArrayList<Dice>();
 	}
 
@@ -21,7 +21,7 @@ public class Item {
 	}
 
 	public void addAttribute(String name, int value, String type) {
-		Stat toAdd = new Stat(name, value, type);
+		AbilityScore toAdd = new AbilityScore(name, value, type);
 		this.attributes.put(name, toAdd);
 	}
 
@@ -43,7 +43,7 @@ public class Item {
 		return toReturn;
 	}
 
-	public Stat getAttribute(String name) {
+	public AbilityScore getAttribute(String name) {
 		return this.attributes.get(name);
 	}
 
@@ -54,7 +54,7 @@ public class Item {
 		sb.append(" Has ");
 		sb.append(this.attributes.size());
 		sb.append(" Attributes\n");
-		for (Stat a : this.attributes.values()) {
+		for (AbilityScore a : this.attributes.values()) {
 			sb.append("\t" + a.toString());
 		}
 		sb.append(" and Has ");

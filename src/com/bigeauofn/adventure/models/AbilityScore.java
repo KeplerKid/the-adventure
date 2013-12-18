@@ -2,13 +2,13 @@ package com.bigeauofn.adventure.models;
 
 import com.bigeauofn.adventure.dicebag.RollResult;
 
-public class Stat implements D20C {
+public class AbilityScore implements D20C {
 	private String name;
 	private String type;
 	private int value;
 	private int bonus;
 	
-	public Stat(String name, int value, String type){
+	public AbilityScore(String name, int value, String type){
 		this.name = name;
 		this.value = value;
 		this.bonus = 0;
@@ -37,8 +37,9 @@ public class Stat implements D20C {
 	protected void setBonus(int bonus){
 		this.bonus += bonus;
 	}
+	
 	public int compareToRollResult(RollResult rr){
-		
+		// TODO
 		
 		return 4;
 	}

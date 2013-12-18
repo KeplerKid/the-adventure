@@ -13,7 +13,6 @@ public class Weapon {
 	private int handsToWield;
 	private int reach;
 
-	// TODO actually make it use dice
 	private ArrayList<Dice> dice;
 
 	private int proficiencyBonus;
@@ -68,7 +67,7 @@ public class Weapon {
 		return enhancementLevel;
 	}
 
-	public RollResult rollWeaponDice(Ability a) {
+	public RollResult rollWeaponDice(Power a) {
 		RollResult toReturn = null;
 
 		for (int i = 0; i < a.getWeaponDiceMultiplier(); i++) {

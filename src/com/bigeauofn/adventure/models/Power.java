@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import com.bigeauofn.adventure.dicebag.*;
 
-public class Ability {
+public class Power {
 
 	private String type;
 	private String name;
@@ -19,9 +19,9 @@ public class Ability {
 	private boolean usesProficiencyBonus;
 	private boolean usesWeapon;
 	private String diceString;
-	private ArrayList<Stat> bonusDamage; // TODO
+	private ArrayList<AbilityScore> bonusDamage; // TODO
 	
-	public Ability(HashMap<String, String> ability) {
+	public Power(HashMap<String, String> ability) {
 		this.type = ability.get("type");
 		this.name = ability.get("name");
 		this.source = ability.get("source");
@@ -63,7 +63,7 @@ public class Ability {
 		int sumBonuses = 0;
 		Weapon w = attacker.getEquipedWeapon();
 
-		sumBonuses += (attacker.getStatInteger(source) - 10) / 2;
+		sumBonuses += (attacker.getAbilityScore(source).getValue() - 10) / 2;
 		System.out.println("Bonus from " + source + ": " + sumBonuses);
 
 		if (this.usesProficiencyBonus) {
@@ -101,7 +101,7 @@ public class Ability {
 		if (this.usesWeapon) {
 			toReturn = equipedWeapon.rollWeaponDice(this);
 		} else {
-			toReturn = rollDamageDice();
+			toReturn = rollAbilityDice();
 		}
 		return toReturn;
 	}
@@ -110,7 +110,7 @@ public class Ability {
 	 * Rolls the damage dice for the ability, ex. will roll 2d4 for Magic Missle
 	 * @return
 	 */
-	private RollResult rollDamageDice() {
+	private RollResult rollAbilityDice() {
 		ArrayList<Dice> damageDice = DiceFactory.getDice(this.diceString);
 		RollResult toReturn = new RollResult(0);
 		
@@ -132,7 +132,7 @@ public class Ability {
 	// not all abilities add the Source as extra damage (ex: Fighter's Sure
 	// Strike pg. 77)
 	private RollResult addAbilityBonusDamage(Actor attacker, RollResult dm) {
-		dm.addModifier((attacker.getStatInteger(source) - 10) / 2);
+		dm.addModifier((attacker.getAbilityScore(source).getValue() - 10) / 2);
 		return dm;
 	}
 
