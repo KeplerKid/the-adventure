@@ -68,7 +68,7 @@ public class Actor {
 		this.baseData = fp.parseFile(this.actorFilePath);
 		this.statBlock = new AbilityScores(fp.getAbilityScores());
 		//Just used to test what in the abilitie scores
-		//System.out.println(this.statBlock.toString());
+		System.out.println(this.statBlock.toString());
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 		this.feats = new FeatCollection();
@@ -87,7 +87,7 @@ public class Actor {
 		this.currentHP.addtHitPoints(new HitPoints(getAbilityScore("con").getValue()));
 		this.diceSet = DiceFactory.getDiceSet();
 
-		//this.testFeats();
+		this.testFeats();
 	}
 
 	private void testFeats() {
@@ -320,12 +320,7 @@ public class Actor {
 	 * @return
 	 */
 	public Vector<Weapon> getWeaponList() {
-		Vector<Weapon> weaponVector = new Vector<Weapon>();
-		for (Weapon w : weapons) {
-			weaponVector.add(w);
-		}
-		
-		return weaponVector;
+		return new Vector<Weapon>(weapons);
 	}
 
 	/**
@@ -347,6 +342,8 @@ public class Actor {
 	public D20C getCompareObject(String type, String key) {
 		switch(type) {
 			case "stat":
+				return this.notDoneYet.get(key);
+			case "ability":
 				return this.statBlock.getAbilityScore(key);
 			case "skill":
 				// TODO

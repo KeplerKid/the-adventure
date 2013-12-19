@@ -6,12 +6,10 @@ public class AbilityScore implements D20C {
 	private String name;
 	private String type;
 	private int value;
-	private int bonus;
 	
 	public AbilityScore(String name, int value, String type){
 		this.name = name;
 		this.value = value;
-		this.bonus = 0;
 		this.type = type;
 	}
 	
@@ -20,23 +18,18 @@ public class AbilityScore implements D20C {
 		return this.name;
 	}
 	public int getValue(){
-		return this.value + this.bonus;
+		return this.value;
 	}
 	public String getType(){
 		return this.type;
 	}
-	public void addBonus(int bonus){
-		this.bonus += bonus;
+	public int getMod(){
+		return Math.max((this.value -10) - 5,0);
 	}
-	protected void setName(String name){
-		this.name = name;
-	}
-	protected void setValue(int value){
-		this.value = value;
-	}
-	protected void setBonus(int bonus){
-		this.bonus += bonus;
-	}
+
+	
+	
+
 	
 	public int compareToRollResult(RollResult rr){
 		// TODO
@@ -46,7 +39,7 @@ public class AbilityScore implements D20C {
 	
 	@Override
 	public String toString(){
-		return "Ability Named - " + this.name + " Has Value = " + this.value + " Current Bonus = " + this.bonus + "\n";
+		return "Ability Named - " + this.name + " Has Value = " + this.value + " Ability Mod = " + this.getMod() + "\n";
 	}
 
 

@@ -1,6 +1,9 @@
 package com.bigeauofn.adventure.models;
 
+
 import java.util.HashMap;
+
+import com.bigaeuofn.adventure.utilities.ListUtility;
 
 public class AbilityScores {
 
@@ -17,10 +20,13 @@ public class AbilityScores {
 	@Override
 	public String toString(){
 		StringBuilder toReturn = new StringBuilder();
-		for(String s : this.abilityList.keySet()){
+		for(String s : ListUtility.asSortedList(this.abilityList.keySet())){
 			toReturn.append(this.abilityList.get(s).toString());
 		}
 		
 		return toReturn.toString();
 	}
+	
+
+
 }
