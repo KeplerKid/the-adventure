@@ -338,6 +338,9 @@ public class Actor {
 	public Power getSelectedAbility() {
 		return selectedAbility;
 	}
+	public HashMap<String, AbilityScore> getNotDoneYet(){
+		return this.notDoneYet;
+	}
 
 	public D20C getCompareObject(String type, String key) {
 		switch(type) {

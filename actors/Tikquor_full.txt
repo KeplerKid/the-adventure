@@ -7,19 +7,17 @@ avatar=res/avatars/hero.png
 [stats]
 level=4
 speed=6
-ac=18
-fort=18
-ref=13
-will=14
-
 basehp=15
 hpperlevel=6
-
-
 initiative=3
 athletics=5
 endurance=5
 intimidate=5
+
+ac=18
+fort=18
+ref=13
+will=14
 
 [abilities]
 str=18

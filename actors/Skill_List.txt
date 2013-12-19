@@ -1,0 +1,6 @@
+[CHA]=Intimidate,Streetwise,Bluff,Diplomacy
+[CON]=Endurance
+[DEX]=Thievery,Stealth,Acrobatics
+[INT]=History,Arcana,Religion
+[STR]=Athletics
+[WIS]=Nature,Perception,Insight,Heal,Heal,Dungeoneering
