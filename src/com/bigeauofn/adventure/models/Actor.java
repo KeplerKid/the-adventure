@@ -36,7 +36,9 @@ public class Actor {
 
 	private HitPoints currentHP;
 	private HashMap<String, String> baseData;
+	private HashMap<String, AbilityScore> notDoneYet;
 	private AbilityScores statBlock;
+	private Skills skillBlock;
 	
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
@@ -65,7 +67,9 @@ public class Actor {
 		StatFileParser fp = new StatFileParser();
 		
 		this.baseData = fp.parseFile(this.actorFilePath);
-		this.statBlock = new AbilityScores(fp.getStats());
+		this.statBlock = new AbilityScores(fp.getAbilityScores());
+		//Just used to test what in the abilities scores
+		//System.out.println(this.statBlock.toString());
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 		this.feats = new FeatCollection();
@@ -75,12 +79,18 @@ public class Actor {
 		this.avatar = loadImage(baseData.get("avatar").toString());
 		this.location = new int[] { 0, 0 };
 
-		this.currentHP = new HitPoints(getAbilityScore("basehp").getValue());
+		
+		this.notDoneYet = fp.getNotDoneYet();
+		this.currentHP = new HitPoints(this.notDoneYet.get("basehp").getValue());
 		this.currentHP.addtHitPoints(new HitPoints(
-				6 * (getAbilityScore("level").getValue() - 1)));
+				6 * (this.notDoneYet.get("level").getValue() - 1)));
+
 		this.currentHP.addtHitPoints(new HitPoints(getAbilityScore("con").getValue()));
 		this.diceSet = DiceFactory.getDiceSet();
 
+		this.skillBlock = new Skills(this);
+		this.skillBlock.addTrainedSkills(fp.getTrainedSkills());
+		System.out.println(this.skillBlock.toString());
 		this.testFeats();
 	}
 
@@ -147,7 +157,7 @@ public class Actor {
 	}
 
 	public RollResult getAttackModifiers(RollResult attackRoll) {
-		int attackBonus = getAbilityScore("level").getValue() / 2;
+		int attackBonus = this.notDoneYet.get("level").getValue() / 2;
 		
 		attackRoll.addModifier(attackBonus);
 		
@@ -257,7 +267,7 @@ public class Actor {
 	public boolean isHitByAttack(AttackRoll attackRoll, String defense) {
 		
 		// TODO onDefense()
-		return attackRoll.getAttackTotal() >= this.getAbilityScore(defense).getValue();
+		return attackRoll.getAttackTotal() >= this.notDoneYet.get(defense).getValue();
 	}
 
 	public void takeDamage(DamageRoll damageDealt) {
@@ -314,12 +324,7 @@ public class Actor {
 	 * @return
 	 */
 	public Vector<Weapon> getWeaponList() {
-		Vector<Weapon> weaponVector = new Vector<Weapon>();
-		for (Weapon w : weapons) {
-			weaponVector.add(w);
-		}
-		
-		return weaponVector;
+		return new Vector<Weapon>(weapons);
 	}
 
 	/**
@@ -337,10 +342,15 @@ public class Actor {
 	public Power getSelectedAbility() {
 		return selectedAbility;
 	}
+	public HashMap<String, AbilityScore> getNotDoneYet(){
+		return this.notDoneYet;
+	}
 
 	public D20C getCompareObject(String type, String key) {
 		switch(type) {
 			case "stat":
+				return this.notDoneYet.get(key);
+			case "ability":
 				return this.statBlock.getAbilityScore(key);
 			case "skill":
 				// TODO

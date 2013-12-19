@@ -7,24 +7,29 @@ avatar=res/avatars/hero.png
 [stats]
 level=4
 speed=6
+basehp=15
+hpperlevel=6
+initiative=3
+
+
+
 ac=18
 fort=18
 ref=13
 will=14
 
-basehp=15
-hpperlevel=6
+[skills]
+Athletics=true
+Endurance=true
+Intimidate=true
+
+[abilities]
 str=18
 con=15
 dex=12
 int=8
 wis=14
 cha=14
-initiative=3
-
-athletics=5
-endurance=5
-intimidate=5
 
 [weapon]
 type=weapon
