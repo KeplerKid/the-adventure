@@ -19,22 +19,10 @@ ref=14
 wil=12
 
 [skills]
-Acrobatics=false
-Arcana=false
-Athletics=false
-Bluff=false
-Diplomacy=false
-Dungeoneering=false
-Endurance=false
-Heal=false
-History=false
-Insight=false
-Intimidate=false
-Nature=false
+Arcana=true
+Intimidate=true
 Perception=true
-Religion=false
 Stealth=true
-Streetwise=false
 Thievery=true
 
 
