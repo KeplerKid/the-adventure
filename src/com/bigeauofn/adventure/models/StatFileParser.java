@@ -56,6 +56,9 @@ public class StatFileParser {
 		case "[ability]":
 			parseAbility(valueSet);
 			break;
+		case "[skills]":
+			parseSkills(valueSet);
+			break;
 		case "[stats]":
 			parseNotDoneYet(valueSet);
 			break;
@@ -67,6 +70,21 @@ public class StatFileParser {
 			break;
 		}
 	}
+	private HashMap<String,Boolean> trainedSkills;
+	public HashMap<String,Boolean>  getTrainedSkills(){
+		if(this.trainedSkills == null){
+			this.trainedSkills = new HashMap<String,Boolean>();
+		}
+		return this.trainedSkills;
+	}
+	private void parseSkills(HashMap<String, String> valueSet) {
+		for (String s : valueSet.keySet()) {
+			if (!s.equals("Thing")) {
+				Boolean toPut = Boolean.parseBoolean(valueSet.get(s));
+				this.getTrainedSkills().put(s, toPut);
+			}
+		}
+	}
 
 	private void parseNotDoneYet(HashMap<String, String> valueSet) {
 		for (String s : valueSet.keySet()) {
@@ -76,7 +94,6 @@ public class StatFileParser {
 				this.getNotDoneYet().put(s, toPut);
 			}
 		}
-		
 	}
 
 	private void parseAbilities(HashMap<String, String> valueSet) {

@@ -38,6 +38,7 @@ public class Actor {
 	private HashMap<String, String> baseData;
 	private HashMap<String, AbilityScore> notDoneYet;
 	private AbilityScores statBlock;
+	private Skills skillBlock;
 	
 	private HashMap<Integer, Dice> diceSet;
 	private ArrayList<Weapon> weapons;
@@ -67,8 +68,8 @@ public class Actor {
 		
 		this.baseData = fp.parseFile(this.actorFilePath);
 		this.statBlock = new AbilityScores(fp.getAbilityScores());
-		//Just used to test what in the abilitie scores
-		System.out.println(this.statBlock.toString());
+		//Just used to test what in the abilities scores
+		//System.out.println(this.statBlock.toString());
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 		this.feats = new FeatCollection();
@@ -87,6 +88,9 @@ public class Actor {
 		this.currentHP.addtHitPoints(new HitPoints(getAbilityScore("con").getValue()));
 		this.diceSet = DiceFactory.getDiceSet();
 
+		this.skillBlock = new Skills(this);
+		this.skillBlock.addTrainedSkills(fp.getTrainedSkills());
+		System.out.println(this.skillBlock.toString());
 		this.testFeats();
 	}
 

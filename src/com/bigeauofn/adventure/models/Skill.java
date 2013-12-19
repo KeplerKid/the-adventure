@@ -9,7 +9,7 @@ public class Skill implements D20C {
 	private String abilityName;
 	private int armourPenalty;
 	private int misc;
-	private Boolean trained;
+	private Boolean trained = false;
 	
 	public Skill(String name, Actor a,String abilityName,  String type){
 		this.name = name;
@@ -24,6 +24,7 @@ public class Skill implements D20C {
 	}
 	public int getValue(){
 		int toReturn = 0;
+		System.out.println(abilityName+ "\n\n\n");
 		toReturn += actor.getAbilityScore(abilityName).getValue();
 		toReturn += actor.getNotDoneYet().get("level").getValue() / 2;
 		toReturn -= this.armourPenalty;
@@ -57,7 +58,7 @@ public class Skill implements D20C {
 	
 	@Override
 	public String toString(){
-		return "Skill Named - " + this.name + " Has Value = " + this.getValue() ;
+		return "Skill Named - " + this.name + ", Has Value = " + this.getValue() + ", Trained = " + this.trained.toString();
 	}
 
 

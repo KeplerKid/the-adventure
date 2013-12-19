@@ -10,14 +10,32 @@ speed=6
 basehp=15
 hpperlevel=6
 initiative=3
-athletics=5
-endurance=5
-intimidate=5
+
+
 
 ac=18
 fort=18
 ref=13
 will=14
+
+[skills]
+Acrobatics=false
+Arcana=false
+Athletics=true
+Bluff=false
+Diplomacy=false
+Dungeoneering=false
+Endurance=true
+Heal=false
+History=false
+Insight=false
+Intimidate=true
+Nature=false
+Perception=false
+Religion=false
+Stealth=false
+Streetwise=false
+Thievery=false
 
 [abilities]
 str=18
