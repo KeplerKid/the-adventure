@@ -26,7 +26,4 @@ public class AbilityScores {
 		
 		return toReturn.toString();
 	}
-	
-
-
 }
