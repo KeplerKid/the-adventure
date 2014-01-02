@@ -1,14 +1,11 @@
 package com.bigeauofn.adventure.models;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
-
+import com.bigaeuofn.adventure.utilities.ImageUtility;
 import com.bigeauofn.adventure.dicebag.AttackRoll;
 import com.bigeauofn.adventure.dicebag.DamageRoll;
 import com.bigeauofn.adventure.dicebag.Dice;
@@ -54,7 +51,7 @@ public class Actor {
 			ActorHandler handler) {
 		this.mHandler = handler;
 		this.name = name;
-		this.avatar = loadImage(avatarPath);
+		this.avatar = ImageUtility.loadImage(avatarPath);
 		this.location = location;
 		this.diceSet = DiceFactory.getDiceSet();
 	}
@@ -76,7 +73,7 @@ public class Actor {
 		
 		
 		this.name = baseData.get("name").toString();
-		this.avatar = loadImage(baseData.get("avatar").toString());
+		this.avatar = ImageUtility.loadImage(baseData.get("avatar").toString());
 		this.location = new int[] { 0, 0 };
 
 		
@@ -208,18 +205,6 @@ public class Actor {
 		this.location[0] += newLoc[0];
 		this.location[1] += newLoc[1];
 		return this.location;
-
-	}
-
-	private BufferedImage loadImage(String path) {
-
-		BufferedImage im = null;
-		try {
-			im = ImageIO.read(new File(path));
-		} catch (IOException e) {
-			System.out.println("Error: Could not load image from: " + path);
-		}
-		return im;
 
 	}
 

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -12,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import com.bigaeuofn.adventure.utilities.ImageUtility;
 import com.bigeauofn.adventure.models.Actor;
 import com.bigeauofn.adventure.models.Doodad;
 
@@ -103,7 +105,13 @@ public class World extends JPanel implements MouseListener {
 		// g.drawImage(d.getAvatar(), d.getLocation()[0],
 		// d.getLocation()[1], null);
 		// }
-
+		
+		BufferedImage img = ImageUtility.loadImage("res/tiles/grass.png");
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				g.drawImage(img, i * xTileSize, j * yTileSize, null);
+			}
+		}
 		for (Actor c : actors) {
 
 			int xLoc = c.getLocation()[0];
