@@ -5,6 +5,7 @@ import com.bigeauofn.adventure.map.tile.ImageReference.orientation;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.PrintStream;
 
 public class BasicTileMap extends ATileMap {
     protected static final ImageReference[][] defaultMap = new ImageReference[][]{{ir(0), ir(1), ir(2), ir(3)},
@@ -52,17 +53,40 @@ public class BasicTileMap extends ATileMap {
         return ret;
     }
 
+    public static void printMap(ImageReference[][] map, PrintStream out) {
+        printMap(map, out, new char[]{'[', ']'}, new char[]{'{', ':', '}', ','});
+    }
+
+    public static void printMap(ImageReference[][] map, PrintStream out, char[] arrayDelims, char[] elementDelims) {
+        out.print(arrayDelims[0]);
+        for (int x = 0; x < map.length; x++) {
+            out.print(arrayDelims[0]);
+            for (int y = 0; y < map[x].length - 1; y++) {
+                out.print(map[x][y].getIndex());
+                out.print(elementDelims[3]);
+            }
+            out.print(map[x][map[x].length - 1].getIndex());
+            out.print(arrayDelims[1]);
+            if (x != map.length - 1) {
+                out.print(elementDelims[3]);
+            }
+        }
+        out.print(arrayDelims[1]);
+    }
+
     protected ImageReference[][] transferOldMap(ImageReference[][] oldMap, int newWidth, int newHeight) {
         ImageReference[][] ret = new ImageReference[newWidth][newHeight];
+        int min;
         if (oldMap != null) {
-            System.arraycopy(oldMap, 0, ret, 0, newWidth * newHeight);
-            /*
-            for (int x = 0; x < newWidth; x++) {
+            min = Math.min(newWidth, oldMap[0].length);
+            for (int x = 0; x < min; x++) {
+                System.arraycopy(oldMap[x], 0, ret[x], 0, Math.min(ret[x].length, oldMap[x].length));
+                /*
                 for (int y = 0; y < newHeight; y++) {
                     ret[x][y] = oldMap[x][y];
                 }
+                */
             }
-            */
         } else {
             for (int x = 0; x < newWidth; x++) {
                 for (int y = 0; y < newHeight; y++) {

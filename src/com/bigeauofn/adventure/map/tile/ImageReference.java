@@ -5,6 +5,10 @@ public class ImageReference {
     protected boolean inverted;
     protected int imageIndex;
 
+    public ImageReference(int index) {
+        this(orientation.ZERO, false, index);
+    }
+
     public ImageReference(orientation startOrientation, boolean inverted, int index) {
         setIndex(index);
         setInversion(inverted);
