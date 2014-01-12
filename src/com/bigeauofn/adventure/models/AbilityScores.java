@@ -1,9 +1,9 @@
 package com.bigeauofn.adventure.models;
 
 
-import java.util.HashMap;
+import com.bigeauofn.adventure.utilities.ListUtility;
 
-import com.bigaeuofn.adventure.utilities.ListUtility;
+import java.util.HashMap;
 
 public class AbilityScores {
 

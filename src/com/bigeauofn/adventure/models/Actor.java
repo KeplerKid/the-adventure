@@ -1,16 +1,12 @@
 package com.bigeauofn.adventure.models;
 
+import com.bigeauofn.adventure.utilities.ImageUtility;
+import com.bigeauofn.adventure.dicebag.*;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
-
-import com.bigaeuofn.adventure.utilities.ImageUtility;
-import com.bigeauofn.adventure.dicebag.AttackRoll;
-import com.bigeauofn.adventure.dicebag.DamageRoll;
-import com.bigeauofn.adventure.dicebag.Dice;
-import com.bigeauofn.adventure.dicebag.DiceFactory;
-import com.bigeauofn.adventure.dicebag.RollResult;
 
 public class Actor {
 
@@ -20,10 +16,11 @@ public class Actor {
 	}
 
 	private ActorHandler mHandler;
-	public static final String BAD_GUY = "res/bad_guy.png";
-	public static final String HERO = "res/hero.png";
+    public static final String defaultFilePath = "actors/Tikquor_full.txt";
+    public static final String BAD_GUY = "res/bad_guy.png";
+    public static final String HERO = "res/hero.png";
 
-	private String actorFilePath;
+    private String actorFilePath;
 	private String name;
 	private BufferedImage avatar;
 	private int[] location;
@@ -47,9 +44,20 @@ public class Actor {
 	// insight, intimidate, nature, perception, religion, stealth,
 	// streetwise, thievery;
 
-	public Actor(String name, String avatarPath, int[] location,
-			ActorHandler handler) {
-		this.mHandler = handler;
+    public Actor(ActorFileParser workAround) {
+    }
+
+    public Actor() {
+        this(defaultFilePath, null);
+    }
+
+    public Actor(String actorFilePath) {
+        this(actorFilePath, null);
+    }
+
+    public Actor(String name, String avatarPath, int[] location,
+                 ActorHandler handler) {
+        this.mHandler = handler;
 		this.name = name;
 		this.avatar = ImageUtility.loadImage(avatarPath);
 		this.location = location;
@@ -57,7 +65,6 @@ public class Actor {
 	}
 
 	public Actor(String filePath, ActorHandler handler) {
-		
 		this.mHandler = handler;
 		this.actorFilePath = filePath;
 		
@@ -70,15 +77,15 @@ public class Actor {
 		this.weapons = fp.getWeapons();
 		this.abilities = fp.getAbilities();
 		this.feats = new FeatCollection();
-		
-		
-		this.name = baseData.get("name").toString();
-		this.avatar = ImageUtility.loadImage(baseData.get("avatar").toString());
-		this.location = new int[] { 0, 0 };
 
-		
-		this.notDoneYet = fp.getNotDoneYet();
-		this.currentHP = new HitPoints(this.notDoneYet.get("basehp").getValue());
+
+        this.name = baseData.get("name");
+        this.avatar = ImageUtility.loadImage(baseData.get("avatar"));
+        this.location = new int[]{0, 0};
+
+
+        this.notDoneYet = fp.getNotDoneYet();
+        this.currentHP = new HitPoints(this.notDoneYet.get("basehp").getValue());
 		this.currentHP.addtHitPoints(new HitPoints(
 				6 * (this.notDoneYet.get("level").getValue() - 1)));
 
@@ -87,14 +94,17 @@ public class Actor {
 
 		this.skillBlock = new Skills(this);
 		this.skillBlock.addTrainedSkills(fp.getTrainedSkills());
-		System.out.println(this.skillBlock.toString());
-		this.testFeats();
-	}
+        System.out.println("Skill block printout in Actor ctor");
+        System.out.println(this.skillBlock.toString());
+        this.testFeats();
 
-	private void testFeats() {
-		System.out.println("feat 1");
-		Feat f1 = new Feat("stat", "speed", 6 + "");
-		if (f1.meetsRequirements(this))
+
+    }
+
+    private void testFeats() {
+        System.out.println("feat 1");
+        Feat f1 = new Feat("stat", "speed", 6 + "");
+        if (f1.meetsRequirements(this))
 			feats.addFeat(f1);
 		
 		System.out.println("feat 2");
@@ -210,28 +220,27 @@ public class Actor {
 
 	// TODO decide if this is enough criteria
 	public boolean equals(Object o) {
-		Actor otherChar = (Actor) o;
-		if (this.avatar.equals(otherChar.avatar)) {
-			if (this.location[0] == otherChar.location[0]) {
-				if (this.location[1] == otherChar.location[1]) {
-					if (this.name.equals(otherChar.name)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+        Actor otherChar;
+        if (o instanceof Actor) {
+            otherChar = (Actor) o;
+            if (this.avatar.equals(otherChar.avatar)) {
+                if (this.location[0] == otherChar.location[0]) {
+                    if (this.location[1] == otherChar.location[1]) {
+                        if (this.name.equals(otherChar.name)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
 	}
 
 	public boolean isAtLocation(int[] tile) {
-		boolean isAtLocation = false;
-		if (tile[0] == location[0] && tile[1] == location[1]) {
-			isAtLocation = true;
-		} else {
-			isAtLocation = false;
-		}
-		return isAtLocation;
-	}
+        boolean isAtLocation;
+        isAtLocation = (tile[0] == location[0] && tile[1] == location[1]);
+        return isAtLocation;
+    }
 
 	public void select() {
 		this.mHandler.onActorClicked(this);
@@ -279,27 +288,33 @@ public class Actor {
 		sb.append("\n");
 		sb.append("Stat block:");
 		for (String s : this.baseData.keySet()) {
-			sb.append("\n\t" + s + ":\t" + this.baseData.get(s));
-		}
+            sb.append("\n\t");
+            sb.append(s);
+            sb.append(":\t");
+            sb.append(this.baseData.get(s));
+        }
 
-		sb.append("\nWeapons Count - ");
+        sb.append("\nWeapons Count - ");
 		sb.append(this.weapons.size());
 		for (Weapon w : this.weapons) {
-			sb.append("\n\t" + w.toString());
-		}
+            sb.append("\n\t");
+            sb.append(w.toString());
+        }
 
-		sb.append("\n\nPlayers Dice count - ");
+        sb.append("\n\nPlayers Dice count - ");
 		sb.append(this.diceSet.size());
 		for (Integer i : this.diceSet.keySet()) {
-			sb.append("\n\t" + this.diceSet.get(i).toString());
-		}
-		sb.append("\n");
+            sb.append("\n\t");
+            sb.append(this.diceSet.get(i).toString());
+        }
+        sb.append("\n");
 		sb.append("Abilities Count - ");
 		sb.append(this.abilities.size());
 		for (Power a : this.abilities) {
-			sb.append("\n\t" + a.toString());
-		}
-		sb.append("------------------------------------------------------\n");
+            sb.append("\n\t");
+            sb.append(a.toString());
+        }
+        sb.append("------------------------------------------------------\n");
 		return sb.toString();
 	}
 
@@ -309,16 +324,16 @@ public class Actor {
 	 * @return
 	 */
 	public Vector<Weapon> getWeaponList() {
-		return new Vector<Weapon>(weapons);
-	}
+        return new Vector<>(weapons);
+    }
 
 	/**
 	 * used for creation of JList in the UI
 	 * @return
 	 */	
 	public Vector<Power> getAbilityList() {
-		return new Vector<Power>(abilities);
-	}
+        return new Vector<>(abilities);
+    }
 
 	public void setSelectedAbility(Power selectedValue) {
 		this.selectedAbility = selectedValue;
@@ -330,7 +345,6 @@ public class Actor {
 	public HashMap<String, AbilityScore> getNotDoneYet(){
 		return this.notDoneYet;
 	}
-
 	public D20C getCompareObject(String type, String key) {
 		switch(type) {
 			case "stat":

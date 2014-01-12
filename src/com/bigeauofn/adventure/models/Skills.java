@@ -1,5 +1,7 @@
 package com.bigeauofn.adventure.models;
 
+import com.bigeauofn.adventure.utilities.ListUtility;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,17 +10,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import com.bigaeuofn.adventure.utilities.ListUtility;
-
 public class Skills {
 	private HashMap<String, Skill> skillList;
 	private Actor actor;
 	
 	public Skills(Actor actor){
 		this.actor = actor;
-		skillList = new HashMap<String,Skill>();
-		this.loadBaseSkills();
-	}
+        skillList = new HashMap<>();
+        this.loadBaseSkills();
+    }
 	
 	public Skill getSkill(String skillName) {
 		return skillList.get(skillName);
@@ -35,8 +35,9 @@ public class Skills {
 	public String toString(){
 		StringBuilder toReturn = new StringBuilder();
 		for(String s : ListUtility.asSortedList(this.skillList.keySet())){
-			toReturn.append(this.skillList.get(s).toString() + "\n");
-		}
+            toReturn.append(this.skillList.get(s).toString());
+            toReturn.append('\n');
+        }
 		
 		return toReturn.toString();
 	}
@@ -60,15 +61,16 @@ public class Skills {
 						String abilityName = line.substring(1, splitter-1);
 						String values = line.substring(splitter + 1,line.length());
 						ArrayList<String> namesOfSkills;
-						namesOfSkills = new ArrayList<String>(Arrays.asList(values.split(",")));
-						for(String s : namesOfSkills){
-							Skill toPut = new Skill(s,this.actor,abilityName,"skill");
+                    namesOfSkills = new ArrayList<>(Arrays.asList(values.split(",")));
+                    for (String s : namesOfSkills) {
+                        Skill toPut = new Skill(s,this.actor,abilityName,"skill");
 							this.skillList.put(s, toPut);
 						}
 
 					} else {
-						// do nothing, ; indicates comment
-					}
+                    continue;
+                    // do nothing, ; indicates comment
+                }
 				}
 			
 

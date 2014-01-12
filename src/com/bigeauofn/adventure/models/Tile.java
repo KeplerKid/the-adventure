@@ -1,13 +1,13 @@
 package com.bigeauofn.adventure.models;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-
-import com.bigaeuofn.adventure.utilities.ImageUtility;
+import com.bigeauofn.adventure.utilities.ImageUtility;
 import com.bigeauofn.adventure.interfaces.GameObject;
 import com.bigeauofn.adventure.interfaces.Targetable;
 import com.bigeauofn.adventure.interfaces.Traversable;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
 
 /**
  * This class represents a single square in the World of the game. According to
