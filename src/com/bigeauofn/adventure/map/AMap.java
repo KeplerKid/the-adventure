@@ -1,12 +1,16 @@
 package com.bigeauofn.adventure.map;
 
 import com.bigeauofn.adventure.graphics.AGraphics;
+import com.bigeauofn.adventure.map.entities.IMapEntity;
+import com.bigeauofn.adventure.map.errors.ErrorReporter;
+import com.bigeauofn.adventure.map.geometry.*;
 import com.bigeauofn.adventure.map.grid.IGrid;
 import com.bigeauofn.adventure.map.lighting.ILighting;
 import com.bigeauofn.adventure.map.mask.IMapMasker;
 import com.bigeauofn.adventure.map.tile.ITileMap;
 
-import java.awt.Point;
+import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /*
@@ -14,14 +18,16 @@ import java.util.Collection;
 *   such as zooming, lighting, and tiles
 * */
 public abstract class AMap implements IMap {
-    protected static final Point defaultPoint = new Point(0, 0);
-
-    // Zoom is currently unimplemented
-    protected double zoomLevel;
+    protected static final IIntPoint defaultPoint = new IntPoint(0, 0);
+    protected static final IDoublePoint defaultScale = new DoublePoint(1.0, 1.0);
 
     // Measures displacement from upper left-hand corner of
     // map to pixel (0, 0) inside parent window.
-    protected Point offset;
+    protected IIntPoint offset;
+    protected double rotation;
+    protected IDoublePoint scale;
+
+    protected IIntDimension panelDimensions;
 
     protected ITileMap tiles;
     protected IBackground background;
@@ -29,40 +35,46 @@ public abstract class AMap implements IMap {
     protected ILighting lighting;
     protected IMapMasker mask;
 
-    protected Collection<? extends IRenderable> renderable;
+    protected Collection<IMapEntity> mapEntities;
 
     public AMap() {
-        this(defaultPoint, 0.0);
+        this(defaultPoint, defaultScale, 0.0);
     }
 
-    public AMap(Point cOffset, double cZoomLevel) {
-        setZoomLevel(cZoomLevel);
-        setOffset(cOffset);
+    public AMap(IIntPoint offset, IDoublePoint scale, double rotation) {
+        setRotation(rotation);
+        setScale(scale);
+        setOffset(offset);
         if (offset == null) {
-            System.err.println("Point cOffset was null!");
-            setOffset(new Point(0, 0));
+            ErrorReporter.println("IIntPoint cOffset was null!", this.getClass());
+            setOffset(defaultPoint);
+        }
+
+        if (scale == null) {
+            ErrorReporter.println("IDoublePoint scale was null!", this.getClass());
+            setScale(defaultScale);
         }
     }
 
     /*
-    * Sets the zoom level for the map.
+    * Sets the scale for this map.
     *
-    * @param newZoom
-    *  New zoom level.
+    * @param scale
+    *  New scale.
     *
-    * @return The old zoom level.
+    * @return The map scale.
     * */
-    public double setZoomLevel(double newZoom) {
-        double ret = zoomLevel;
-        zoomLevel = newZoom;
+    public IDoublePoint setScale(IDoublePoint scale) {
+        IDoublePoint ret = this.scale;
+        this.scale = scale;
         return ret;
     }
 
     /*
-    * @return The currently set zoom level.
+    * @return The currently set scale.
     * */
-    public double getZoomLevel() {
-        double ret = zoomLevel;
+    public IDoublePoint getScale() {
+        IDoublePoint ret = this.scale;
         return ret;
     }
 
@@ -75,8 +87,8 @@ public abstract class AMap implements IMap {
     * @return The previously used offset.
     *       When newOffset is null, null is returned and the previous offset remains in use.
     * */
-    public Point setOffset(Point newOffset) {
-        Point ret = offset;
+    public IIntPoint setOffset(IIntPoint newOffset) {
+        IIntPoint ret = offset;
         if (newOffset == null) {
             ret = newOffset;
         } else {
@@ -90,9 +102,33 @@ public abstract class AMap implements IMap {
     *
     * @return The current offset.
     * */
-    public Point getOffset() {
-        Point ret = offset;
+    public IIntPoint getOffset() {
+        IIntPoint ret = offset;
         return ret;
+    }
+
+    /**
+     * Sets the rotation of the map relative to the center of its tiles.
+     *
+     * @param newRotation The new Rotation for the map.
+     * @return double
+     * The old rotation.
+     */
+    public double setRotation(double newRotation) {
+        double ret = this.rotation;
+        this.rotation = newRotation;
+        return ret;
+    }
+
+    /**
+     * Gets the current rotation of the map relative to the center of its tiles.
+     *
+     * @return double
+     * The current rotation of the map.
+     */
+    public double getRotation() {
+        double ret = this.rotation;
+        return rotation;
     }
 
     /*
@@ -229,34 +265,56 @@ public abstract class AMap implements IMap {
     }
 
     /*
-    * Sets the current Collection of IRenderables.
+    * Sets the current Collection of MapEntities.
     *
-    * @param newRenderables
-    *   The new Collection of Irenderables to use for this Map.
+    * @param newEntities
+    *   The new Collection of Mapentities to use for this Map.
     *
-    * @return The previously used Collection of IRenderables.
-    *   Returns null when newRenderables is null and the Collection is not changed.
+    * @return The previously used Collection of MapEntities.
+    *   Returns null when newEntities is null and the Collection is not changed.
     * */
-    public Collection<? extends IRenderable> setRenderables(Collection<? extends IRenderable> newRenderables) {
-        Collection<? extends IRenderable> ret = renderable;
-        if (newRenderables == null) {
-            ret = newRenderables;
+    public Collection<? extends IMapEntity> setEntities(Collection<? extends IMapEntity> newEntities) {
+        Collection<? extends IMapEntity> ret = mapEntities;
+        if (newEntities == null) {
+            ret = newEntities;
         } else {
-            // todo set this to put all elements of newRenderables into a new ArrayList stored as renderable
-            ret = renderable;
+            mapEntities = new ArrayList<IMapEntity>(newEntities);
         }
         return ret;
     }
 
     /*
-    * @return The current Collection of IRenderables
+    * @return The current Collection of MapEntities
     * */
-    public Collection<? extends IRenderable> getRenderables() {
-        Collection<? extends IRenderable> ret = renderable;
+    public Collection<IMapEntity> getEntities() {
+        Collection<IMapEntity> ret = mapEntities;
         return ret;
     }
 
-    // todo add 'addRenderable' and 'addRenderables' methods to IMap and AMap.
+    /*
+    * Adds newEntities to the current Collection of MapEntities.
+    *
+    * @param newEntities
+    *   The Collection of MapEntities to add to this Maps Collection of MapEntities.
+    * */
+    public void addEntities(Collection<? extends IMapEntity> newEntities) {
+        this.mapEntities.addAll(newEntities);
+    }
+
+    public void addEntity(IMapEntity newEntity) {
+        this.mapEntities.add(newEntity);
+    }
+
+    public IIntDimension setPanelDimensions(IIntDimension panel) {
+        IIntDimension ret = panelDimensions;
+        panelDimensions = panel;
+        return ret;
+    }
+
+    public IIntDimension getPanelDimensions() {
+        IIntDimension ret = panelDimensions;
+        return ret;
+    }
 
     /*
     * Paints the map.
@@ -273,18 +331,22 @@ public abstract class AMap implements IMap {
         * Paint grid
         *   Can IGrid paint itself?
         * */
+        AffineTransform xForm = new AffineTransform();
+        AffineTransform oldForm = g.getTransform();
 
-        g.applyOffset(offset);
+        xForm.setToTranslation(offset.getX(), offset.getY());
+        xForm.scale(scale.getX(), scale.getY());
+        xForm.rotate(rotation, panelDimensions.getWidth() / 2.0, panelDimensions.getHeight());
+        g.setTransform(xForm);
+
         background.paint(g);
         tiles.paint(g);
-        for (IRenderable r : renderable) {
-            continue;
-            // r.paint();
+        for (IMapEntity r : mapEntities) {
+            r.paint(g);
         }
         mask.paint(g);
         grid.paint(g);
-        g.popLastOffset();
 
-
+        g.setTransform(oldForm);
     }
 }

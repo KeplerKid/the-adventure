@@ -1,10 +1,13 @@
 package com.bigeauofn.adventure.map;
 
 import com.bigeauofn.adventure.graphics.AGraphics;
+import com.bigeauofn.adventure.map.entities.IMapEntity;
+import com.bigeauofn.adventure.map.geometry.IDoublePoint;
+import com.bigeauofn.adventure.map.geometry.IIntDimension;
+import com.bigeauofn.adventure.map.geometry.IIntPoint;
 import com.bigeauofn.adventure.map.grid.IGrid;
 import com.bigeauofn.adventure.map.tile.ITileMap;
 
-import java.awt.Point;
 import java.util.Collection;
 
 /*
@@ -13,30 +16,30 @@ import java.util.Collection;
 * */
 public interface IMap extends IRenderable {
     /*
-    * Sets the zoom level for the map.
+    * Sets the scale for this map.
     *
-    * @param newZoom
-    *  New zoom level.
+    * @param scale
+    *  New scale.
     *
-    * @return The old zoom level.
+    * @return The scale.
     * */
-    public double setZoomLevel(double newZoom);
+    public IDoublePoint setScale(IDoublePoint scale);
 
     /*
-    * @return The currently set zoom level.
+    * @return The currently set scale.
     * */
-    public double getZoomLevel();
+    public IDoublePoint getScale();
 
     /*
     * Sets the displacement from {0, 0} in the parent window to the upper
     *   left-hand corner of the rectangle containing the ITilesMap for this IMap.
     *
-    * @param newPoint
+    * @param newIIntPoint
     *   The new displacement from the origin of a parent window.
     *
     * @return The old displacement for this IMap.
     * */
-    public Point setOffset(Point newPoint);
+    public IIntPoint setOffset(IIntPoint newIIntPoint);
 
     /*
     * Gets the offset from {0, 0} in the parent window to the upper
@@ -44,7 +47,24 @@ public interface IMap extends IRenderable {
     *
     * @return The current displacement for this IMap.
     * */
-    public Point getOffset();
+    public IIntPoint getOffset();
+
+    /**
+     * Sets the rotation of the map.
+     *
+     * @param rotation The new rotation for the map.
+     * @return double
+     * The old rotation for the map.
+     */
+    public double setRotation(double rotation);
+
+    /**
+     * Gets the rotation of this map.
+     *
+     * @return double
+     * The rotation for this map.
+     */
+    public double getRotation();
 
     /*
     * Sets the IBackground this map will use.
@@ -95,25 +115,46 @@ public interface IMap extends IRenderable {
     public IGrid getGrid();
 
     /*
-    * Sets the IRenderable Collection to be used by this IMap.
+    * Re-initialises the  the MapEntity Collection used by this IMap and adds all the Elements of newEntityList.
     *
-    * @param newContainer
-    *   The new IRenderable Collection for this IMap to use.
+    * @param newEntityList
+    *   The new IMapEntity Collection for this IMap to use.
     *
-    * @return The old IRenderable Collection previously used by this IMap.
+    * @return The old IMapEntity Collection previously used by this IMap.
     * */
-    public Collection<? extends IRenderable> setRenderables(Collection<? extends IRenderable> newRenderableList);
+    public Collection<? extends IMapEntity> setEntities(Collection<? extends IMapEntity> newEntityList);
 
     /*
-    * Gets the IRenderable Collection to be used by this IMap.
+    * Gets the MapEntity Collection to be used by this IMap.
     *
-    * @return The IRenderable Collection to be used by this IMap.
+    * @return The MapEntity Collection to be used by this IMap.
     * */
-    public Collection<? extends IRenderable> getRenderables();
+    public Collection<? extends IMapEntity> getEntities();
+
 
     /*
-   * Base paint function for the map.
-   *   Will be overloaded based on graphics plugin in an implementing class.
-   * */
+    * Adds the MapEntity Collection to the current MapEntity Collection used by this IMap.
+    *
+    * @param newEntities
+    *   The MapEntity Collection to add to the current Collection.
+    * */
+    public void addEntities(Collection<? extends IMapEntity> newEntities);
+
+    /*
+    * Adds the single MapEntity to the current MapEntity Collection used by this IMap.
+    *
+    * @param newEntity
+    *   The MapEntity to be added to the current Collection of MapEntities.
+    * */
+    public void addEntity(IMapEntity newEntity);
+
+    public IIntDimension setPanelDimensions(IIntDimension panel);
+
+    public IIntDimension getPanelDimensions();
+
+    /*
+    * Base paint function for the map.
+    *   Will be overloaded based on graphics plugin in an implementing class.
+    * */
     public void paint(AGraphics g);
 }
