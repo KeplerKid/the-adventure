@@ -1,9 +1,9 @@
 package com.bigeauofn.adventure.models;
 
-import com.bigeauofn.adventure.utilities.ImageUtility;
 import com.bigeauofn.adventure.interfaces.GameObject;
 import com.bigeauofn.adventure.interfaces.Targetable;
 import com.bigeauofn.adventure.interfaces.Traversable;
+import com.bigeauofn.adventure.utilities.ImageUtility;
 
 import java.awt.Graphics;
 import java.awt.Image;
