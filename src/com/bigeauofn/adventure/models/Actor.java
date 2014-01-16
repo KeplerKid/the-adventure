@@ -1,7 +1,7 @@
 package com.bigeauofn.adventure.models;
 
-import com.bigeauofn.adventure.utilities.ImageUtility;
 import com.bigeauofn.adventure.dicebag.*;
+import com.bigeauofn.adventure.utilities.ImageUtility;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -94,7 +94,6 @@ public class Actor {
 
 		this.skillBlock = new Skills(this);
 		this.skillBlock.addTrainedSkills(fp.getTrainedSkills());
-        System.out.println("Skill block printout in Actor ctor");
         System.out.println(this.skillBlock.toString());
         this.testFeats();
 
