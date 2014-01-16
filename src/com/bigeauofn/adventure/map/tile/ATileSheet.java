@@ -1,8 +1,8 @@
 package com.bigeauofn.adventure.map.tile;
 
+import com.bigeauofn.adventure.map.geometry.IIntDimension;
 import com.bigeauofn.adventure.utilities.ImageUtility;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 
@@ -12,16 +12,16 @@ public abstract class ATileSheet {
             ImageUtility.loadImage("res/tiles/moldy_dungeon_64.png"),
             ImageUtility.loadImage("res/tiles/cracked_gray_dungeon_64.png")};
 
-    protected Dimension tileSize;
+    protected IIntDimension tileSize;
 
-    public Dimension setTileSize(Dimension newTileSize) {
-        Dimension ret = tileSize;
+    public IIntDimension setTileSize(IIntDimension newTileSize) {
+        IIntDimension ret = tileSize;
         tileSize = newTileSize;
         return ret;
     }
 
-    public Dimension getTileSize() {
-        Dimension ret = tileSize;
+    public IIntDimension getTileSize() {
+        IIntDimension ret = tileSize;
         return ret;
     }
 

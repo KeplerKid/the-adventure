@@ -1,6 +1,8 @@
 package com.bigeauofn.adventure.map.tile;
 
-import java.awt.Dimension;
+import com.bigeauofn.adventure.map.geometry.IIntDimension;
+import com.bigeauofn.adventure.map.geometry.IntDimension;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ArrayTileSheet extends ATileSheet {
-    protected static final Dimension defaultTileSize = new Dimension(64, 64);
+    protected static final IIntDimension defaultTileSize = new IntDimension(64, 64);
 
     protected ArrayList<BufferedImage> images;
 
@@ -16,11 +18,11 @@ public class ArrayTileSheet extends ATileSheet {
         this(defaultTileSize, Arrays.asList(tiles[0], tiles[1], tiles[2], tiles[3]));
     }
 
-    public ArrayTileSheet(Dimension tileSize, Collection<BufferedImage> imageCollection) {
+    public ArrayTileSheet(IIntDimension tileSize, Collection<BufferedImage> imageCollection) {
         this(tileSize, imageCollection, false);
     }
 
-    public ArrayTileSheet(Dimension dim, Collection<BufferedImage> imageCollection, boolean properlySized) {
+    public ArrayTileSheet(IIntDimension dim, Collection<BufferedImage> imageCollection, boolean properlySized) {
         setTileSize(dim);
         if (properlySized) {
             setProperlySizedImages(imageCollection);

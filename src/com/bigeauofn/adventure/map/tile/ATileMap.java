@@ -1,31 +1,33 @@
 package com.bigeauofn.adventure.map.tile;
 
 import com.bigeauofn.adventure.graphics.AGraphics;
+import com.bigeauofn.adventure.map.geometry.IIntDimension;
+import com.bigeauofn.adventure.map.geometry.IIntPoint;
+import com.bigeauofn.adventure.map.geometry.IntDimension;
+import com.bigeauofn.adventure.map.geometry.IntPoint;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public abstract class ATileMap implements ITileMap {
-    protected Point offset;
-    protected Dimension mapSize;
+    protected IIntPoint offset;
+    protected IIntDimension mapSize;
     protected ATileSheet tileSheet;
 
-    public ATileMap(ATileSheet tileSheet, Dimension mapSize, Point offset) {
+    public ATileMap(ATileSheet tileSheet, IIntDimension mapSize, IIntPoint offset) {
         setOffset(offset);
         setMapSize(mapSize);
         setTileSheet(tileSheet);
 
         if (this.offset == null) {
-            System.err.println("Point offset is null!");
-            setOffset(new Point(0, 0));
+            System.err.println("IntPoint offset is null!");
+            setOffset(new IntPoint(0, 0));
         }
 
         if (this.mapSize == null) {
             System.err.println("Dimension mapSize is null!");
-            setMapSize(new Dimension(0, 0));
+            setMapSize(new IntDimension(0, 0));
         }
 
         if (this.tileSheet == null) {
@@ -34,25 +36,25 @@ public abstract class ATileMap implements ITileMap {
         }
     }
 
-    public Point setOffset(Point newOffset) {
-        Point ret = offset;
+    public IIntPoint setOffset(IIntPoint newOffset) {
+        IIntPoint ret = offset;
         offset = newOffset;
         return ret;
     }
 
-    public Point getOffset() {
-        Point ret = offset;
+    public IIntPoint getOffset() {
+        IIntPoint ret = offset;
         return ret;
     }
 
-    public Dimension setMapSize(Dimension newMapSize) {
-        Dimension ret = mapSize;
+    public IIntDimension setMapSize(IIntDimension newMapSize) {
+        IIntDimension ret = mapSize;
         mapSize = newMapSize;
         return ret;
     }
 
-    public Dimension getMapSize() {
-        Dimension ret = mapSize;
+    public IIntDimension getMapSize() {
+        IIntDimension ret = mapSize;
         return ret;
     }
 
@@ -62,15 +64,25 @@ public abstract class ATileMap implements ITileMap {
         return ret;
     }
 
+    public ATileSheet getTileSheet() {
+        ATileSheet ret = tileSheet;
+        return ret;
+    }
+
+    public IIntPoint getDimensions() {
+        IIntPoint ret = new IntPoint(mapSize.getWidth() * tileSheet.getTileSize().getWidth(), mapSize.getHeight() * tileSheet.getTileSize().getHeight());
+        return ret;
+    }
+
     abstract public BufferedImage tile(int x, int y);
 
     protected int scaleX(int x) {
-        int ret = x * (int) tileSheet.getTileSize().getWidth();
+        int ret = x * tileSheet.getTileSize().getWidth();
         return ret;
     }
 
     protected int scaleY(int y) {
-        int ret = y * (int) tileSheet.getTileSize().getHeight();
+        int ret = y * tileSheet.getTileSize().getHeight();
         return ret;
     }
 
@@ -79,10 +91,10 @@ public abstract class ATileMap implements ITileMap {
     }
 
     public Rectangle tileBoundries(Rectangle rectangle, int x, int y) {
-        rectangle.setBounds(scaleX(x) + (int) offset.getX(),
-                scaleY(y) + (int) offset.getY(),
-                (int) tileSheet.getTileSize().getWidth(),
-                (int) tileSheet.getTileSize().getHeight());
+        rectangle.setSize(tileSheet.getTileSize().getWidth(),
+                tileSheet.getTileSize().getHeight());
+        rectangle.setLocation(scaleX(x) + offset.getX(),
+                scaleY(y) + offset.getY());
         return rectangle;
     }
 
