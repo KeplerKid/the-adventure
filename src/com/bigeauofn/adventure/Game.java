@@ -8,6 +8,7 @@ import com.bigeauofn.adventure.models.Weapon;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -97,7 +98,12 @@ public class Game implements Actor.ActorHandler, ActionListener {
     }
 
     public static void main(String[] args) {
-        new Game();
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new SuperMapGame();
+            }
+        });
     }
 
     @Override

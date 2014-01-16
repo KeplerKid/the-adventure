@@ -4,33 +4,29 @@ import com.bigeauofn.adventure.map.BasicMap;
 import com.bigeauofn.adventure.map.ColorBackground;
 import com.bigeauofn.adventure.map.IMap;
 import com.bigeauofn.adventure.map.MapPanel;
+import com.bigeauofn.adventure.map.geometry.DoublePoint;
+import com.bigeauofn.adventure.map.geometry.IntPoint;
 import com.bigeauofn.adventure.map.grid.BasicGrid;
 import com.bigeauofn.adventure.map.lighting.BasicLighting;
 import com.bigeauofn.adventure.map.mask.BasicMapMasker;
 import com.bigeauofn.adventure.map.tile.BasicTileMap;
-import com.bigeauofn.adventure.models.Actor;
 import com.bigeauofn.adventure.models.Power;
 import com.bigeauofn.adventure.models.Weapon;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.util.ArrayList;
 
 /*
-* // todo
 * todo
-* Get Actors to render in SuperMapGame.
+* todo
 * Finish ActorFileParser/Lexer so that StatFileParser can be eliminated.
-* Fix Actor ctor output stream! GAHHHHH! So annoying.
-* Start implementing action behavior for with new maps.
+* Start implementing action behavior for/with new maps.
 *   Implement selection and targeting for actors.
 *   Implement attacking and ability use.
 *   Implement Click and drag for actors.
 *   Implement multiSelect for Click and drag actors.
-*   Implement map movement.
-* Test that offset things work when the map is moved around.
-* Test that actors work with offsets when maps is moved around.
 * Implement Grids.
 * Implement Masks.
 * Implement Buffered rendering so that lighting can be Applied.
@@ -42,7 +38,7 @@ import java.util.ArrayList;
 public class SuperMapGame /* implements KeyboardListener, MouseListener*/ {
     protected static final String noActorSelected = "No actor selected!", title = "The Adventure";
     protected static IMap map;
-    protected static ArrayList<Actor> actors;
+
     protected static JFrame frame;
     protected static JLabel actorName, actorHP;
     protected static JButton attack;
@@ -51,14 +47,28 @@ public class SuperMapGame /* implements KeyboardListener, MouseListener*/ {
     protected static JList<Power> abilityList;
 
     public SuperMapGame() {
+
         MapPanel mapPanel = new MapPanel();
+        mapPanel.addMouseWheelListener(mapPanel);
+        mapPanel.addMouseListener(mapPanel);
+        mapPanel.addMouseMotionListener(mapPanel);
+        mapPanel.addComponentListener(mapPanel);
         // create the world
-        map = new BasicMap(new BasicTileMap(),
+        ColorBackground colorBackground = new ColorBackground(mapPanel);
+        colorBackground.setColor(Color.DARK_GRAY);
+
+        BasicTileMap tileMap = new BasicTileMap();
+
+        map = new BasicMap(new IntPoint(0, 0),
+                new DoublePoint(1.25, 1.25),
+                0.0,
+                tileMap,
                 new BasicGrid(),
-                new ColorBackground(mapPanel),
+                colorBackground,
                 new BasicLighting(),
                 new BasicMapMasker(),
-                BasicMap.defaultRenderables);
+                BasicMap.defaultEntities);
+
         mapPanel.setPreferredSize(new Dimension(640, 480));
         mapPanel.setMap(map);
 
