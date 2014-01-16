@@ -48,5 +48,6 @@ public class ColorBackground implements IBackground {
     }
 
     public void paint(AGraphics g) {
+        // Do nothing, the background is handled by panel, this object's JPanel
     }
 }
